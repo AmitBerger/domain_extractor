@@ -27,7 +27,7 @@ Domain Extractor is a command-line utility that scans text files for domain name
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/AmitBerger/domain-extractor.git
+   git clone https://github.com/AmitBerger/domain_extractor.git
    cd domain-extractor
    ```
 
@@ -113,6 +113,6 @@ $ python domain_extractor.py server_logs.txt domains.txt
 
 ## 📬 Contact
 
-Project Link: [https://github.com/yourusername/domain-extractor](https://github.com/AmitBerger/domain-extractor)
+Project Link: [https://github.com/yourusername/domain-extractor](https://github.com/AmitBerger/domain_extractor)
 
 ---
