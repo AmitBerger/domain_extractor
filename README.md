@@ -1,4 +1,4 @@
-# # Domain Extractor
+# Domain Extractor
 
 A powerful and lightweight Python tool that extracts, validates, and resolves domain names from text files.
 
