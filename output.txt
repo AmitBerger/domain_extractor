@@ -1,11 +1,11 @@
 google.com 142.250.75.174
 microsoft.com 13.107.246.62
 apple.com 17.253.144.10
-amazon.com 205.251.242.103
-netflix.com 54.155.246.232
+amazon.com 54.239.28.85
+netflix.com 52.214.181.141
 facebook.com 157.240.203.35
-yahoo.com 74.6.231.21
-youtube.com 142.250.75.142
+yahoo.com 98.137.11.164
+youtube.com 142.250.75.78
 reddit.com 151.101.1.140
 github.com 20.217.135.5
 twitter.com 172.66.0.227
@@ -17,9 +17,9 @@ linkedin.com 150.171.22.12
 wikipedia.org 185.15.59.224
 pinterest.com 151.101.192.84
 bing.com 150.171.28.10
-medium.com 162.159.153.4
-slack.com 3.68.170.153
-bbc.co.uk 151.101.128.81
+medium.com 162.159.152.4
+slack.com 3.68.124.95
+bbc.co.uk 151.101.64.81
 lemonde.fr 151.101.122.137
 spiegel.de 128.65.210.8
 corriere.it 185.53.36.36
@@ -28,7 +28,7 @@ sina.com.cn 36.51.254.91
 globo.com.br 186.192.83.5
 blog.example.com
 docs.github.io 185.199.108.153
-news.bbc.co.uk 212.58.249.144
+news.bbc.co.uk 212.58.244.56
 dev.api.company.com
 test.staging.project.org 208.91.197.27
 a.b.c.d.example.net
@@ -56,7 +56,7 @@ facbook.com 157.240.203.14
 youtub.com
 amason.com 185.53.179.7
 gooooogle.com 198.251.81.30
-faceeboook.com 52.33.207.7
+faceeboook.com 44.230.85.241
 amazonnn.com 3.33.139.32
 googel.com 142.250.75.132
 yahooo.com 76.223.84.192
@@ -97,17 +97,17 @@ api.test.org
 server.net 193.160.30.2
 mozilla.org 35.190.14.201
 apache.org 151.101.2.132
-docs.python.org 151.101.64.223
-ebay.com 23.213.161.221
-cnn.com 151.101.131.5
+docs.python.org 151.101.0.223
+ebay.com 2.20.178.219
+cnn.com 151.101.3.5
 reuters.com 155.46.172.255
 instagram.com 157.240.203.174
-tiktok.com 199.203.60.57
+tiktok.com 199.203.60.25
 gitlab.com 172.65.251.78
-bitbucket.org 185.166.143.48
+bitbucket.org 185.166.143.49
 abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijk.com 185.53.178.73
 example.net
-test.com 3.18.255.247
+test.com 34.224.149.186
 localhost.localdomain
 123domain.com 216.34.94.177
 domain123.org 146.103.45.4
