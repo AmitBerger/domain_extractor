@@ -1,0 +1,74 @@
+DOMAIN EXTRACTION MEGA TEST - COMPREHENSIVE EDGE CASE TESTING
+
+Regular websites: google.com microsoft.com apple.com amazon.com netflix.com facebook.com yahoo.com
+Upper/mixed case: YOUTUBE.COM Reddit.com GitHuB.com TwItTeR.cOm
+With www: www.ebay.com www.instagram.com
+With http/https: http://spotify.com https://dropbox.com
+With paths: linkedin.com/jobs github.com/explore wikipedia.org/wiki/DNS
+With query params: pinterest.com?source=test bing.com?q=domains&lang=en
+With fragments: medium.com#article slack.com#channels
+
+Country code TLDs: bbc.co.uk lemonde.fr spiegel.de corriere.it yandex.ru sina.com.cn globo.com.br
+IDNs: 例子.中国 пример.рф παράδειγμα.ελ مثال.مصر
+
+Simple subdomains: blog.example.com docs.github.io news.bbc.co.uk
+Multi-level: dev.api.company.com test.staging.project.org a.b.c.d.example.net
+Numeric: 123.example.org 42.subdomain.example.com
+Hyphens: my-awesome-subdomain.example.org api-test-prod.company.com
+
+New gTLDs: example.app example.dev example.shop example.blog example.tech
+Short domains: t.co a.io q.net x.org k.fr j.jp
+Unusual valid TLDs: example.museum example.travel example.jobs example.xyz
+Very long domains: this-is-a-very-very-very-very-very-very-very-very-very-long-domain-name-that-approaches-the-maximum-length-limits-for-dns-labels.com
+
+Common typos: goggle.com facbook.com youtub.com amason.com
+Letter repetition: gooooogle.com faceeboook.com amazonnn.com
+Character swap: googel.com yahooo.com micosoft.com
+Letter addition: gooogle.com faceboook.com micrrosoft.com
+TLD swap: facebook.org youtube.net amazon.co microsoft.info
+
+HTML context: <a href="https://example.com">Link</a> <img src="http://example.org/image.jpg">
+XML/JSON: {"url": "https://api.example.com/v1/data"} <domain>test.example.net</domain>
+Code blocks: const url = 'https://example.com'; var domain = "api.github.com";
+Markdown: [Example Link](https://example.com) ![Image](https://example.org/img.png)
+In comments: // This is a comment with example.com website reference
+
+Punctuation adjacency: domain.com, domain.com. domain.com: domain.com; domain.com? domain.com!
+Combined with text: mywebsiteexample.com notadomain.example textandexample.com domainwithintext
+Nested parentheses: (check out (example.com) for details)
+URL encoding: example.com%20with%20spaces http://example.com/%7Euser/page.html
+
+Invalid characters: example$.com domain+with+plus.org bad*chars.net
+Invalid formats: -leading-hyphen.com trailing-hyphen-.org double--hyphen..com
+Spaces in domain: domain with spaces.com
+IP addresses (not domains): 192.168.1.1 10.0.0.1 172.16.254.1
+
+Fictional domains: hogwarts.wizarding.world stark-industries.marvel wakanda.africa
+                   aperture-science.portal minecraft.net vault-tec.fallout umbrella-corp.resident-evil
+
+Table Format:
+| Website      | URL                     | Description        |
+|--------------|-------------------------|--------------------|
+| Example      | https://example.com     | Example Domain     |
+| Test Site    | http://test.org/page    | Testing Site       |
+| Cloud Drive  | drive.example.net/share | File Sharing       |
+
+Domains with unusual ports: example.com:8080 api.test.org:443 server.net:22
+Domains in email: contact@mozilla.org support@github.com info@apache.org
+
+This section contains a very long text with domains scattered throughout.
+Microsoft.com is a well-known tech company. Visit example.org for more information.
+You can find documentation at docs.python.org or read articles on medium.com about 
+programming. For shopping, check amazon.com or ebay.com depending on your preferences.
+News can be found on cnn.com, bbc.co.uk, reuters.com, and many other news sites.
+Social media includes facebook.com, twitter.com, instagram.com, and tiktok.com for 
+different types of content. For development, github.com, gitlab.com, and bitbucket.org
+provide version control solutions.
+
+Maximum length domain: abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijk.com
+Domain with emoji URL: 😀😃😄😁😆😅.ws
+Reserved domains: example.com example.org example.net test.com localhost.localdomain
+
+Text with multiple domains on one line: Visit apple.com, microsoft.com and google.com for tech.
+Text with domain at start and end: facebook.com is a social network similar to instagram.com
+Domains with numbers: 123domain.com domain123.org 99bottles.net 101computing.net
