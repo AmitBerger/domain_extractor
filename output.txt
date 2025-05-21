@@ -1,75 +1,115 @@
-google.com
-microsoft.com
-apple.com
-amazon.com
-netflix.com
-facebook.com
-yahoo.com
-youtube.com
-reddit.com
-github.com
-twitter.com
-www.ebay.com
-www.instagram.com
-spotify.com
-dropbox.com
-linkedin.com
-wikipedia.org
-pinterest.com
-bing.com
-medium.com
-slack.com
-bbc.co.uk
-lemonde.fr
-spiegel.de
-corriere.it
-yandex.ru
-sina.com.cn
-globo.com.br
-docs.github.io
-news.bbc.co.uk
-test.staging.project.org
-t.co
-a.io
-q.net
-x.org
-k.fr
-facbook.com
-amason.com
-gooooogle.com
-faceeboook.com
-amazonnn.com
-googel.com
-yahooo.com
-gooogle.com
-faceboook.com
-micrrosoft.com
-facebook.org
-amazon.co
-microsoft.info
-api.github.com
-domain.com
-mywebsiteexample.com
-plus.org
-chars.net
-spaces.com
-hogwarts.wizarding.world
-wakanda.africa
-minecraft.net
-server.net
-mozilla.org
-apache.org
-docs.python.org
-ebay.com
-cnn.com
-reuters.com
-instagram.com
-tiktok.com
-gitlab.com
-bitbucket.org
-abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijk.com
-test.com
-123domain.com
-domain123.org
-99bottles.net
-101computing.net
+google.com 142.250.75.174
+microsoft.com 13.107.246.62
+apple.com 17.253.144.10
+amazon.com 205.251.242.103
+netflix.com 54.155.246.232
+facebook.com 157.240.203.35
+yahoo.com 74.6.231.21
+youtube.com 142.250.75.142
+reddit.com 151.101.1.140
+github.com 20.217.135.5
+twitter.com 172.66.0.227
+www.ebay.com 23.46.165.83
+www.instagram.com 157.240.203.174
+spotify.com 35.186.224.24
+dropbox.com 162.125.248.18
+linkedin.com 150.171.22.12
+wikipedia.org 185.15.59.224
+pinterest.com 151.101.192.84
+bing.com 150.171.28.10
+medium.com 162.159.153.4
+slack.com 3.68.170.153
+bbc.co.uk 151.101.128.81
+lemonde.fr 151.101.122.137
+spiegel.de 128.65.210.8
+corriere.it 185.53.36.36
+yandex.ru 77.88.44.55
+sina.com.cn 36.51.254.91
+globo.com.br 186.192.83.5
+blog.example.com
+docs.github.io 185.199.108.153
+news.bbc.co.uk 212.58.249.144
+dev.api.company.com
+test.staging.project.org 208.91.197.27
+a.b.c.d.example.net
+123.example.org
+42.subdomain.example.com
+my-awesome-subdomain.example.org
+api-test-prod.company.com
+example.app
+example.dev
+example.shop
+example.blog
+example.tech
+t.co 162.159.140.229
+a.io 85.10.133.119
+q.net 54.159.98.68
+x.org 131.252.210.176
+k.fr 217.70.184.38
+j.jp
+example.museum
+example.travel
+example.jobs
+example.xyz
+goggle.com
+facbook.com 157.240.203.14
+youtub.com
+amason.com 185.53.179.7
+gooooogle.com 198.251.81.30
+faceeboook.com 52.33.207.7
+amazonnn.com 3.33.139.32
+googel.com 142.250.75.132
+yahooo.com 76.223.84.192
+micosoft.com
+gooogle.com 142.250.75.68
+faceboook.com 157.240.203.14
+micrrosoft.com 20.236.44.162
+facebook.org 157.240.203.14
+youtube.net
+amazon.co 72.21.206.80
+microsoft.info 20.76.201.171
+example.com
+example.org
+image.jpg
+api.example.com
+test.example.net
+api.github.com 20.217.135.0
+img.png
+domain.com 172.64.145.59
+mywebsiteexample.com 3.33.130.190
+notadomain.example
+textandexample.com
+page.html
+plus.org 15.197.225.128
+chars.net 76.223.54.146
+leading-hyphen.com
+spaces.com 99.83.190.102
+hogwarts.wizarding.world 107.23.241.98
+stark-industries.marvel
+wakanda.africa 13.248.169.48
+aperture-science.portal
+minecraft.net 40.90.65.84
+vault-tec.fallout
+umbrella-corp.resident
+test.org
+drive.example.net
+api.test.org
+server.net 193.160.30.2
+mozilla.org 35.190.14.201
+apache.org 151.101.2.132
+docs.python.org 151.101.64.223
+ebay.com 23.213.161.221
+cnn.com 151.101.131.5
+reuters.com 155.46.172.255
+instagram.com 157.240.203.174
+tiktok.com 199.203.60.57
+gitlab.com 172.65.251.78
+bitbucket.org 185.166.143.48
+abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijk.com 185.53.178.73
+example.net
+test.com 3.18.255.247
+localhost.localdomain
+123domain.com 216.34.94.177
+domain123.org 146.103.45.4
+99bottles.net 34.174.251.210
+101computing.net 194.76.27.135
