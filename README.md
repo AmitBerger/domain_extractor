@@ -27,7 +27,7 @@ Domain Extractor is a command-line utility that scans text files for domain name
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/domain-extractor.git
+   git clone https://github.com/AmitBerger/domain-extractor.git
    cd domain-extractor
    ```
 
@@ -87,11 +87,6 @@ $ python domain_extractor.py webpage.html domains.txt
 $ python domain_extractor.py server_logs.txt domains.txt
 ```
 
-### Example 3: Analyze email content
-
-```bash
-$ python domain_extractor.py email_export.txt email_domains.txt
-```
 
 ## ⚠️ Limitations
 
@@ -115,16 +110,6 @@ $ python domain_extractor.py email_export.txt email_domains.txt
 - Domains with maximum length labels
 - Mixed case domains
 
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📬 Contact
 
