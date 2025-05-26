@@ -2,10 +2,17 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 import tempfile
-from domain_extractor import extract_domains, get_domain_ip
+from domain_extractor import extract_domains, get_domain_ip, check_domain_virustotal
+import requests
+from typing import Optional
 
 app = Flask(__name__)
 CORS(app)
+
+# Load VirusTotal API key from environment
+VT_API_KEY = os.getenv("VIRUSTOTAL_API_KEY")
+if not VT_API_KEY:
+    print("Warning: 'VIRUSTOTAL_API_KEY' environment variable not set. Skipping VirusTotal checks.")
 
 def process_domains(text):
     """Extract and resolve domains using domain_extractor.py functions"""
@@ -14,11 +21,15 @@ def process_domains(text):
     
     for domain in domains:
         ip = get_domain_ip(domain)
+        # always check VT if key present
+        vt_status = check_domain_virustotal(domain, VT_API_KEY) if VT_API_KEY else None
+
         results.append({
             'domain': domain,
             'status': 'resolved' if ip else 'valid',
             'ip': ip,
-            'id': domain.replace('.', '_')
+            'id': domain.replace('.', '_'),
+            'vt_status': vt_status
         })
     
     return results

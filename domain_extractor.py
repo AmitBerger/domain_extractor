@@ -14,6 +14,7 @@ import re
 import socket
 import sys
 from typing import List, Tuple, Optional
+import requests  # Add VirusTotal API support
 
 def extract_domains(text: str) -> List[str]:
     """
@@ -112,7 +113,31 @@ def get_domain_ip(domain: str, timeout: float = 1.0) -> Optional[str]:
         # Restore original timeout
         socket.setdefaulttimeout(original_timeout)
 
-def process_file(input_file: str, output_file: str) -> None:
+def check_domain_virustotal(domain: str, api_key: str) -> Optional[str]:
+    """
+    Check if a domain is malicious using the VirusTotal API.
+    Returns 'malicious', 'suspicious', 'clean', or None on error.
+    """
+    url = f"https://www.virustotal.com/api/v3/domains/{domain}"
+    headers = {"x-apikey": api_key}
+    try:
+        resp = requests.get(url, headers=headers, timeout=5)
+        if resp.status_code == 200:
+            data = resp.json()
+            stats = data.get("data", {}).get("attributes", {}).get("last_analysis_stats", {})
+            if stats.get("malicious", 0) > 0:
+                return "malicious"
+            if stats.get("suspicious", 0) > 0:
+                return "suspicious"
+            return "clean"
+        else:
+            print(f"VirusTotal API error for {domain}: {resp.status_code}")
+            return None
+    except Exception as e:
+        print(f"Error querying VirusTotal for {domain}: {e}")
+        return None
+
+def process_file(input_file: str, output_file: str, vt_api_key: Optional[str] = None) -> None:
     """
     Process input file and write domains to output file.
     All valid-format domains are included, with IP addresses when available.
@@ -120,6 +145,7 @@ def process_file(input_file: str, output_file: str) -> None:
     Args:
         input_file: Path to input text file
         output_file: Path to output file for domains
+        vt_api_key: Optional VirusTotal API key for checking maliciousness
     """
     try:
         # Read input file
@@ -139,15 +165,20 @@ def process_file(input_file: str, output_file: str) -> None:
     print(f"Found {len(potential_domains)} potential domains. Checking...")
     
     for domain in potential_domains:
-        # Check if domain resolves to an IP
         ip_address = get_domain_ip(domain)
-        
-        if ip_address:
-            print(f"Checking {domain}... RESOLVES TO {ip_address}")
-            results.append(f"{domain} {ip_address}")
-        else:
-            print(f"Checking {domain}... VALID FORMAT (NO IP)")
-            results.append(domain)
+        # optionally check maliciousness
+        vt_status = check_domain_virustotal(domain, vt_api_key) if vt_api_key else None
+
+        # print status
+        status_msg = f"RESOLVES TO {ip_address}" if ip_address else "VALID FORMAT (NO IP)"
+        vt_msg = f" VT: {vt_status}" if vt_status else ""
+        print(f"Checking {domain}... {status_msg}{vt_msg}")
+
+        # build output line
+        line = f"{domain} {ip_address}" if ip_address else domain
+        if vt_status:
+            line += f" {vt_status}"
+        results.append(line)
     
     try:
         # Write all domains to output file
@@ -167,14 +198,15 @@ def process_file(input_file: str, output_file: str) -> None:
 
 def main():
     """Main function to handle command line arguments and run the script."""
-    if len(sys.argv) != 3:
-        print("Usage: python domain_extractor.py input.txt output.txt")
+    if len(sys.argv) < 3 or len(sys.argv) > 4:
+        print("Usage: python domain_extractor.py input.txt output.txt [virustotal_api_key]")
         sys.exit(1)
-        
+
     input_file = sys.argv[1]
     output_file = sys.argv[2]
-    
-    process_file(input_file, output_file)
+    vt_api_key = sys.argv[3] if len(sys.argv) == 4 else None
+
+    process_file(input_file, output_file, vt_api_key)
 
 if __name__ == "__main__":
     main()

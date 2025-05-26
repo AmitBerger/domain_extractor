@@ -42,13 +42,14 @@ $ pip install -r requirements.txt
 ### Basic Usage
 
 ```bash
-python domain_extractor.py input.txt output.txt
+python domain_extractor.py input.txt output.txt [virustotal_api_key]
+# optional: include your VirusTotal API key to flag malicious domains
 ```
 
 ### Example
 
 ```bash
-$ python domain_extractor.py webpages.txt domains.txt
+$ python domain_extractor.py webpages.txt domains.txt YOUR_VT_API_KEY
 Found 115 potential domains. Checking...
 Checking google.com... RESOLVES TO 142.250.72.142
 Checking example.org... VALID FORMAT (NO IP)
@@ -64,21 +65,42 @@ The output file contains one domain per line:
 - Domains that resolve to an IP address include the IP: `google.com 142.250.72.142`
 - Domains with valid format but no IP resolution: `example.org`
 
-### Desktop GUI <a id="desktop-gui"></a>
+### Desktop GUI <a id="desktop-gui"></a>
+
 ```bash
-$ python GUI.py            # launches a themable drag‑and‑drop window
+# Optional: set your VirusTotal key, then launch the desktop GUI
+Linux/macOS:
+```bash
+export VIRUSTOTAL_API_KEY="YOUR_API_KEY"
+python GUI.py
+```
+Windows PowerShell:
+```powershell
+$Env:VIRUSTOTAL_API_KEY="YOUR_API_KEY"
+python GUI.py
+```
 ```
 
-1. Click **Select Text Files** or paste a URL.  
+1. Click **Select Text Files** or paste a URL.  
 2. Press **Extract** and watch the progress bar.  
 3. Copy or save results from the output pane.
 
 ![GUI](https://github.com/user-attachments/assets/b4b0f906-b0f0-4c3c-a06d-24ee16189a0d)
 
-### Web interface <a id="web-interface"></a>
+### Web interface <a id="web-interface"></a>
+
 ```bash
-# Start the Flask back‑end (serves index.html on http://127.0.0.1:5000)
-$ python domain_extractor_server.py
+# Set your VirusTotal key, then start the Flask back-end
+Linux/macOS:
+```bash
+export VIRUSTOTAL_API_KEY="YOUR_API_KEY"
+python domain_extractor_server.py
+```
+Windows PowerShell:
+```powershell
+$Env:VIRUSTOTAL_API_KEY="YOUR_API_KEY"
+python domain_extractor_server.py
+```
 ```
 Then open your browser ➜ **http://127.0.0.1:5000**.
 
@@ -142,3 +164,4 @@ Project Link: [https://github.com/yourusername/domain-extractor](https://github.
 
 
 ---
+

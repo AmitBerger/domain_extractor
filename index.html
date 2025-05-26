@@ -365,6 +365,15 @@
                                                             {result.ip && (
                                                                 <p className="text-gray-400 text-sm">IP: {result.ip}</p>
                                                             )}
+                                                            {result.vt_status && (
+                                                                <p className={
+                                                                    `text-sm ${
+                                                                        result.vt_status === 'malicious' ? 'text-red-400' :
+                                                                        result.vt_status === 'suspicious' ? 'text-yellow-400' :
+                                                                        'text-green-400'
+                                                                    }`
+                                                                }>VT: {result.vt_status}</p>
+                                                            )}
                                                         </div>
                                                     </div>
                                                     <button

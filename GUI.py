@@ -22,9 +22,10 @@ Dependencies:
 """
 
 import customtkinter as ctk
-from tkinter import filedialog, messagebox
 import os
 import subprocess
+import tkinter as tk
+from tkinter import filedialog, messagebox
 
 # === Initialize global appearance and theme ===
 ctk.set_appearance_mode("System")          # Options: "System", "Light", "Dark"
@@ -108,8 +109,13 @@ class DomainExtractorApp(ctk.CTk):
         self.result_label = ctk.CTkLabel(self, text="Results:")
         self.result_label.pack(pady=(10, 5))
 
-        self.result_text = ctk.CTkTextbox(self, width=650, height=300)
-        self.result_text.pack(padx=20, pady=(0, 20))
+        # Use a plain tk.Text to allow colored tags
+        self.result_text = tk.Text(self, width=80, height=18, bd=0, wrap="none")
+        self.result_text.pack(padx=20, pady=(0, 20), fill="both", expand=True)
+        # VT status tags
+        self.result_text.tag_configure("malicious", foreground="red")
+        self.result_text.tag_configure("suspicious", foreground="orange")
+        self.result_text.tag_configure("clean", foreground="green")
 
         # === Status Bar ===
         self.status_bar = ctk.CTkLabel(self, text="Ready", anchor="w")
@@ -198,16 +204,28 @@ class DomainExtractorApp(ctk.CTk):
             self.progress_bar.set(0.5)
             self.update_idletasks()
 
-            # Run domain_extractor.py via subprocess
-            subprocess.run(["python", "domain_extractor.py", input_file, output_file], check=True)
+            # Run domain_extractor.py via subprocess, include VT key if set
+            vt_key = os.getenv("VIRUSTOTAL_API_KEY")
+            cmd = ["python", "domain_extractor.py", input_file, output_file]
+            if vt_key:
+                cmd.append(vt_key)
+            subprocess.run(cmd, check=True)
 
             self.progress_bar.set(1.0)
             self.status_bar.configure(text="Completed")
 
             if os.path.exists(output_file):
+                # Read & display with color tags
                 with open(output_file, "r", encoding="utf-8") as f:
-                    results = f.read()
-                self.result_text.insert("1.0", results)
+                    lines = f.readlines()
+                self.result_text.delete("1.0", "end")
+                for line in lines:
+                    parts = line.strip().split()
+                    vt_tag = parts[-1] if parts and parts[-1] in ("malicious", "suspicious", "clean") else None
+                    if vt_tag:
+                        self.result_text.insert("end", line, vt_tag)
+                    else:
+                        self.result_text.insert("end", line)
             else:
                 messagebox.showerror("Error", "No results found.")
         except subprocess.CalledProcessError as e:
@@ -215,7 +233,7 @@ class DomainExtractorApp(ctk.CTk):
             self.status_bar.configure(text="Error")
             self.progress_bar.set(0)
         finally:
-            # Reset status and progress bar after delay
+            # Reset after delay
             self.after(2000, lambda: self.status_bar.configure(text="Ready"))
             self.after(2000, lambda: self.progress_bar.set(0))
 
