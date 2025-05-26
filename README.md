@@ -6,17 +6,17 @@ A powerful and lightweight Python tool that extracts, validates, and resolves do
 
 ## 📋 Overview
 
-Domain Extractor is a command-line and GUI utility that scans text files for domain names, validates their format according to DNS standards, and checks if they resolve to IP addresses. It provides a comprehensive solution for identifying and verifying domains in any text content.
+Domain Extractor is a command-line and GUI utility that scans text files for domain names, validates their format according to DNS standards, and checks if they resolve to IP addresses. It can optionally query the VirusTotal API to flag domains as malicious, suspicious, or clean. It provides a comprehensive solution for identifying and verifying domains in any text content.
 
 ## ✨ Features
 
 - 🔍 **Robust Domain Detection**: Finds domains embedded in text, URLs, HTML, code, and more
 - ✅ **DNS Format Validation**: Validates domains according to official DNS naming standards
 - 🌐 **IP Resolution**: Checks if domains resolve to IP addresses
-
+- 🛡️ **VirusTotal Integration**: Optionally queries the VirusTotal API to mark domains as malicious, suspicious, or clean
 - 🔄 **Format Normalization**: Handles mixed case, surrounding punctuation, and more
 - 🧪 **Edge Case Support**: Handles subdomains, IDNs, new TLDs, and challenging formats
-- 📊 **Detailed Results**: Provides comprehensive output with IP addresses when available
+- 📊 **Detailed Results**: Provides comprehensive output with IP addresses and optional VirusTotal safety status
 
 ## 🚀 Installation
 
