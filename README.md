@@ -67,9 +67,10 @@ The output file contains one domain per line:
 
 ### Desktop GUI <a id="desktop-gui"></a>
 
-```bash
-# Optional: set your VirusTotal key, then launch the desktop GUI
+
+Optional: set your VirusTotal key, then launch the desktop GUI
 Linux/macOS:
+
 ```bash
 export VIRUSTOTAL_API_KEY="YOUR_API_KEY"
 python GUI.py
@@ -79,7 +80,7 @@ Windows PowerShell:
 $Env:VIRUSTOTAL_API_KEY="YOUR_API_KEY"
 python GUI.py
 ```
-```
+
 
 1. Click **Select Text Files** or paste a URL.  
 2. Press **Extract** and watch the progress bar.  
@@ -89,8 +90,8 @@ python GUI.py
 
 ### Web interface <a id="web-interface"></a>
 
-```bash
-# Set your VirusTotal key, then start the Flask back-end
+
+Set your VirusTotal key, then start the Flask back-end
 Linux/macOS:
 ```bash
 export VIRUSTOTAL_API_KEY="YOUR_API_KEY"
@@ -101,7 +102,7 @@ Windows PowerShell:
 $Env:VIRUSTOTAL_API_KEY="YOUR_API_KEY"
 python domain_extractor_server.py
 ```
-```
+
 Then open your browser ➜ **http://127.0.0.1:5000**.
 
 ![web](https://github.com/user-attachments/assets/a2a536e3-038e-4b22-8c49-1c1a6d75efe0)
@@ -141,6 +142,8 @@ $ python domain_extractor.py server_logs.txt domains.txt
 - Some valid domains may not resolve to IP addresses (e.g., newly registered domains)
 - DNS resolution may be affected by network conditions and DNS server configuration
 - Very large files may require significant processing time
+- VirusTotal Integration: Maliciousness checks require a valid API key without it, domains are still extracted but not flagged
+- Performance Impact: Querying VirusTotal for each domain adds network latency and may slow down processing on large lists
 
 ## 📊 Performance
 
