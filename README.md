@@ -144,6 +144,7 @@ $ python domain_extractor.py server_logs.txt domains.txt
 - Very large files may require significant processing time
 - VirusTotal Integration: Maliciousness checks require a valid API key without it, domains are still extracted but not flagged
 - Performance Impact: Querying VirusTotal for each domain adds network latency and may slow down processing on large lists
+-Daili 500 requests limitaion from API(for a free user)
 
 ## 📊 Performance
 
