@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, send_file
 from flask_cors import CORS
 import os
 import tempfile
@@ -105,6 +105,13 @@ def download_results():
         )
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/download-output', methods=['GET'])
+def download_output_txt():
+    output_path = "output.txt"
+    if not os.path.exists(output_path):
+        return jsonify({'error': 'No output.txt file found'}), 404
+    return send_file(output_path, as_attachment=True, download_name="output.txt")
 
 if __name__ == '__main__':
     print("🚀 Domain Extractor Server running on http://localhost:5000")

@@ -69,6 +69,7 @@
             const [searchTerm, setSearchTerm] = useState('');
             const [copiedDomain, setCopiedDomain] = useState(null);
             const [error, setError] = useState(null);
+            const [canDownloadOutput, setCanDownloadOutput] = useState(false);
 
             // API call to extract domains from text
             const handleProcessUrl = async () => {
@@ -91,6 +92,7 @@
                     
                     if (data.success) {
                         setResults(data.results);
+                        setCanDownloadOutput(true);
                     } else {
                         setError(data.error || 'Failed to extract domains');
                     }
@@ -123,6 +125,7 @@
                     
                     if (data.success) {
                         setResults(data.results);
+                        setCanDownloadOutput(true);
                     } else {
                         setError(data.error || 'Failed to extract domains from file');
                     }
@@ -413,6 +416,16 @@
                                     <p className="text-gray-300">Extracting and validating domains...</p>
                                 </div>
                             )}
+
+                            {/* Download output.txt Button */}
+                            <button
+                                onClick={() => window.open('http://localhost:5000/api/download-output', '_blank')}
+                                className={`px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors duration-300 flex items-center ml-2 ${!canDownloadOutput ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!canDownloadOutput}
+                            >
+                                <Icon name="Download" className="w-4 h-4 mr-2" />
+                                Download output.txt
+                            </button>
                         </div>
                     </div>
                 </div>

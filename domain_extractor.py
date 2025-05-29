@@ -137,6 +137,31 @@ def check_domain_virustotal(domain: str, api_key: str) -> Optional[str]:
         print(f"Error querying VirusTotal for {domain}: {e}")
         return None
 
+def get_asn_info(ip: str) -> Optional[str]:
+    """
+    Get ASN info for an IP address using ipinfo.io (no API key required for basic info).
+    Returns a string with ASN, org, country, and network if available.
+    """
+    try:
+        resp = requests.get(f"https://ipinfo.io/{ip}/json", timeout=3)
+        if resp.status_code == 200:
+            data = resp.json()
+            org = data.get("org", "")
+            country = data.get("country", "")
+            network = data.get("network", "")
+            asn_info = []
+            if org:
+                asn_info.append(org)
+            if country:
+                asn_info.append(country)
+            if network:
+                asn_info.append(network)
+            return " | ".join(asn_info) if asn_info else None
+        return None
+    except Exception as e:
+        print(f"Error getting ASN for {ip}: {e}")
+        return None
+
 def process_file(input_file: str, output_file: str, vt_api_key: Optional[str] = None) -> None:
     """
     Process input file and write domains to output file.
@@ -166,18 +191,25 @@ def process_file(input_file: str, output_file: str, vt_api_key: Optional[str] = 
     
     for domain in potential_domains:
         ip_address = get_domain_ip(domain)
-        # optionally check maliciousness
         vt_status = check_domain_virustotal(domain, vt_api_key) if vt_api_key else None
 
-        # print status
-        status_msg = f"RESOLVES TO {ip_address}" if ip_address else "VALID FORMAT (NO IP)"
-        vt_msg = f" VT: {vt_status}" if vt_status else ""
-        print(f"Checking {domain}... {status_msg}{vt_msg}")
+        line_parts = [domain]
 
-        # build output line
-        line = f"{domain} {ip_address}" if ip_address else domain
+        if ip_address:
+            line_parts.append(ip_address)
+        else:
+            line_parts.append("")  # keep column order
+
         if vt_status:
-            line += f" {vt_status}"
+            line_parts.append(f"VR:{vt_status}")
+
+        if ip_address:
+            asn_info = get_asn_info(ip_address)
+            if asn_info:
+                line_parts.append(f"ASN:{asn_info}")
+
+        # Join only non-empty parts with a space
+        line = " ".join(part for part in line_parts if part)
         results.append(line)
     
     try:

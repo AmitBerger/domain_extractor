@@ -117,6 +117,16 @@ class DomainExtractorApp(ctk.CTk):
         self.result_text.tag_configure("suspicious", foreground="orange")
         self.result_text.tag_configure("clean", foreground="green")
 
+        # === Download Output.txt Button ===
+        self.download_button = ctk.CTkButton(
+            self,
+            text="Download output.txt",
+            command=self.download_output_file,
+            corner_radius=10,
+            state="disabled"
+        )
+        self.download_button.pack(pady=(0, 10))
+
         # === Status Bar ===
         self.status_bar = ctk.CTkLabel(self, text="Ready", anchor="w")
         self.status_bar.pack(fill="x", side="bottom")
@@ -220,22 +230,54 @@ class DomainExtractorApp(ctk.CTk):
                     lines = f.readlines()
                 self.result_text.delete("1.0", "end")
                 for line in lines:
-                    parts = line.strip().split()
-                    vt_tag = parts[-1] if parts and parts[-1] in ("malicious", "suspicious", "clean") else None
+                    # Remove ASN info for GUI display
+                    line_wo_asn = line
+                    if " ASN:" in line:
+                        line_wo_asn = line.split(" ASN:")[0] + "\n"
+                    parts = line_wo_asn.strip().split()
+                    vt_tag = None
+                    for tag in ("malicious", "suspicious", "clean"):
+                        if any(f"VR:{tag}" in p for p in parts):
+                            vt_tag = tag
+                            break
                     if vt_tag:
-                        self.result_text.insert("end", line, vt_tag)
+                        self.result_text.insert("end", line_wo_asn, vt_tag)
                     else:
-                        self.result_text.insert("end", line)
+                        self.result_text.insert("end", line_wo_asn)
+                self.download_button.configure(state="normal")
             else:
                 messagebox.showerror("Error", "No results found.")
+                self.download_button.configure(state="disabled")
         except subprocess.CalledProcessError as e:
             messagebox.showerror("Error", f"Error running the script: {e}")
             self.status_bar.configure(text="Error")
             self.progress_bar.set(0)
+            self.download_button.configure(state="disabled")
         finally:
             # Reset after delay
             self.after(2000, lambda: self.status_bar.configure(text="Ready"))
             self.after(2000, lambda: self.progress_bar.set(0))
+
+    def download_output_file(self):
+        """
+        Opens a file dialog to save a copy of output.txt.
+        """
+        output_file = "output.txt"
+        if not os.path.exists(output_file):
+            messagebox.showerror("Error", "No output.txt file found.")
+            return
+        save_path = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
+            initialfile="output.txt"
+        )
+        if save_path:
+            try:
+                with open(output_file, "rb") as src, open(save_path, "wb") as dst:
+                    dst.write(src.read())
+                messagebox.showinfo("Success", f"Saved as {save_path}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Could not save file: {e}")
 
 # === Run application ===
 if __name__ == "__main__":

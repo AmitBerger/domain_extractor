@@ -1,115 +1,115 @@
-google.com 142.250.75.174 clean
-microsoft.com 13.107.246.77 clean
-apple.com 17.253.144.10 clean
-amazon.com 54.239.28.85 clean
-netflix.com 54.155.178.5 clean
-facebook.com 157.240.203.35 clean
-yahoo.com 74.6.231.21 clean
-youtube.com 142.250.75.142 clean
-reddit.com 151.101.193.140 clean
-github.com 20.217.135.5 clean
-twitter.com 172.66.0.227 clean
-www.ebay.com 23.46.165.83 clean
-www.instagram.com 157.240.203.174 clean
-spotify.com 35.186.224.24 clean
-dropbox.com 162.125.248.18 clean
-linkedin.com 150.171.22.12 clean
-wikipedia.org 185.15.59.224 clean
-pinterest.com 151.101.128.84 clean
-bing.com 150.171.27.10 clean
-medium.com 162.159.153.4 clean
-slack.com 52.29.238.212 clean
-bbc.co.uk 151.101.128.81 clean
-lemonde.fr 151.101.122.137 clean
-spiegel.de 128.65.210.8 clean
-corriere.it 185.53.36.36 clean
-yandex.ru 77.88.55.88 clean
-sina.com.cn 36.51.254.91 clean
-globo.com.br 186.192.83.5 clean
-blog.example.com clean
-docs.github.io 185.199.108.153 clean
-news.bbc.co.uk 212.58.249.145 clean
-dev.api.company.com clean
-test.staging.project.org 208.91.197.27 clean
-a.b.c.d.example.net clean
-123.example.org clean
-42.subdomain.example.com clean
-my-awesome-subdomain.example.org clean
-api-test-prod.company.com clean
-example.app clean
-example.dev clean
-example.shop clean
-example.blog clean
-example.tech clean
-t.co 172.66.0.227 clean
-a.io 85.10.133.119 clean
-q.net 54.159.98.68 clean
-x.org 131.252.210.176 clean
-k.fr 217.70.184.38 clean
-j.jp malicious
-example.museum clean
-example.travel clean
-example.jobs clean
-example.xyz suspicious
-goggle.com malicious
-facbook.com 157.240.203.14 malicious
-youtub.com suspicious
-amason.com 185.53.179.7 malicious
-gooooogle.com 107.161.23.204 suspicious
-faceeboook.com 52.33.207.7 clean
-amazonnn.com 3.33.139.32 clean
-googel.com 142.250.75.132 clean
-yahooo.com 76.223.84.192 malicious
-micosoft.com malicious
-gooogle.com 142.250.75.100 clean
-faceboook.com 157.240.203.14 suspicious
-micrrosoft.com 20.236.44.162 clean
-facebook.org 157.240.203.14 clean
-youtube.net clean
-amazon.co 72.21.206.80 clean
-microsoft.info 20.112.250.133 malicious
-example.com clean
-example.org clean
+google.com 142.250.75.78 VR:clean ASN:AS15169 Google LLC | IL
+microsoft.com 13.107.246.77 VR:clean ASN:AS8075 Microsoft Corporation | US
+apple.com 17.253.144.10 VR:clean ASN:AS714 Apple Inc. | US
+amazon.com 205.251.242.103 VR:clean ASN:AS16509 Amazon.com, Inc. | US
+netflix.com 54.73.148.110 VR:clean ASN:AS16509 Amazon.com, Inc. | IE
+facebook.com 163.70.147.35 VR:clean ASN:AS32934 Facebook, Inc. | GB
+yahoo.com 74.6.231.21 VR:clean ASN:AS36646 Oath Holdings Inc. | US
+youtube.com 142.250.75.174 VR:clean ASN:AS15169 Google LLC | IL
+reddit.com 151.101.1.140 VR:clean ASN:AS54113 Fastly, Inc. | US
+github.com 20.217.135.5 VR:malicious ASN:AS8075 Microsoft Corporation | IL
+twitter.com 172.66.0.227 VR:clean ASN:AS13335 Cloudflare, Inc. | US
+www.ebay.com 23.46.165.83 VR:clean ASN:AS1680 Cellcom Fixed Line Communication L.P | IL
+www.instagram.com 157.240.203.174 VR:clean ASN:AS32934 Facebook, Inc. | IT
+spotify.com 35.186.224.24 VR:clean ASN:AS396982 Google LLC | US
+dropbox.com 162.125.248.18 VR:clean ASN:AS19679 Dropbox, Inc. | US
+linkedin.com 150.171.22.12 VR:clean ASN:AS8075 Microsoft Corporation | US
+wikipedia.org 185.15.59.224 VR:clean ASN:AS14907 Wikimedia Foundation Inc. | NL
+pinterest.com 151.101.64.84 VR:clean ASN:AS54113 Fastly, Inc. | US
+bing.com 150.171.28.10 VR:clean ASN:AS8075 Microsoft Corporation | US
+medium.com 162.159.153.4 VR:clean ASN:AS13335 Cloudflare, Inc. | US
+slack.com 3.68.124.168 VR:clean ASN:AS16509 Amazon.com, Inc. | DE
+bbc.co.uk 151.101.0.81 VR:clean ASN:AS54113 Fastly, Inc. | US
+lemonde.fr 151.101.122.137 VR:clean ASN:AS54113 Fastly, Inc. | FR
+spiegel.de 128.65.210.8 VR:clean ASN:AS34309 Link11 GmbH | DE
+corriere.it 185.53.36.36 VR:clean ASN:AS202095 RCS MediaGroup S.p.a. | IT
+yandex.ru 77.88.44.55 VR:clean ASN:AS13238 YANDEX LLC | RU
+sina.com.cn 36.51.254.91 VR:clean ASN:AS37936 SINA | CN
+globo.com.br 186.192.83.5 VR:clean ASN:AS28604 Globo Comunicação e Participaçoes SA | BR
+blog.example.com VR:clean
+docs.github.io 185.199.108.153 VR:clean ASN:AS54113 Fastly, Inc. | US
+news.bbc.co.uk 212.58.244.56 VR:clean ASN:AS2818 BBC | GB
+dev.api.company.com VR:clean
+test.staging.project.org 208.91.197.27 VR:clean ASN:AS40034 Confluence Networks Inc | US
+a.b.c.d.example.net VR:clean
+123.example.org VR:clean
+42.subdomain.example.com VR:clean
+my-awesome-subdomain.example.org VR:clean
+api-test-prod.company.com VR:clean
+example.app VR:clean
+example.dev VR:clean
+example.shop VR:clean
+example.blog VR:clean
+example.tech VR:clean
+t.co 172.66.0.227 VR:clean ASN:AS13335 Cloudflare, Inc. | US
+a.io 85.10.133.119 VR:clean ASN:AS20857 Signet B.V. | NL
+q.net 54.159.98.68 VR:clean ASN:AS14618 Amazon.com, Inc. | US
+x.org 131.252.210.176 VR:clean ASN:AS6366 Portland State University | US
+k.fr 217.70.184.38 VR:clean ASN:AS29169 GANDI SAS | FR
+j.jp VR:malicious
+example.museum VR:clean
+example.travel VR:clean
+example.jobs VR:clean
+example.xyz VR:suspicious
+goggle.com VR:malicious
+facbook.com 163.70.147.22 VR:malicious ASN:AS32934 Facebook, Inc. | GB
+youtub.com VR:suspicious
+amason.com 185.53.179.7 VR:malicious ASN:AS61969 Team Internet AG | DE
+gooooogle.com 209.141.38.71 VR:suspicious ASN:AS53667 FranTech Solutions | US
+faceeboook.com 52.33.207.7 VR:clean ASN:AS16509 Amazon.com, Inc. | US
+amazonnn.com 3.33.139.32 VR:clean ASN:AS16509 Amazon.com, Inc. | US
+googel.com 142.250.75.164 VR:clean ASN:AS15169 Google LLC | IL
+yahooo.com 13.248.158.7 VR:malicious ASN:AS16509 Amazon.com, Inc. | US
+micosoft.com VR:malicious
+gooogle.com 142.250.75.164 VR:clean ASN:AS15169 Google LLC | IL
+faceboook.com 157.240.203.14 VR:malicious ASN:AS32934 Facebook, Inc. | IT
+micrrosoft.com 20.236.44.162 VR:clean ASN:AS8075 Microsoft Corporation | US
+facebook.org 157.240.203.14 VR:clean ASN:AS32934 Facebook, Inc. | IT
+youtube.net VR:clean
+amazon.co 207.171.166.22 VR:clean ASN:AS16509 Amazon.com, Inc. | US
+microsoft.info 20.70.246.20 VR:malicious ASN:AS8075 Microsoft Corporation | AU
+example.com VR:clean
+example.org VR:clean
 image.jpg
-api.example.com clean
-test.example.net clean
-api.github.com 20.217.135.0 clean
+api.example.com VR:clean
+test.example.net VR:clean
+api.github.com 20.217.135.0 VR:clean ASN:AS8075 Microsoft Corporation | IL
 img.png
-domain.com 104.18.42.197 clean
-mywebsiteexample.com 15.197.148.33 clean
+domain.com 172.64.145.59 VR:clean ASN:AS13335 Cloudflare, Inc. | US
+mywebsiteexample.com 15.197.148.33 VR:clean ASN:AS16509 Amazon.com, Inc. | US
 notadomain.example
-textandexample.com clean
+textandexample.com VR:clean
 page.html
-plus.org 3.33.251.168 clean
-chars.net 76.223.54.146 clean
-leading-hyphen.com clean
-spaces.com 75.2.70.75 clean
-hogwarts.wizarding.world 107.23.241.98 clean
+plus.org 3.33.251.168 VR:clean ASN:AS16509 Amazon.com, Inc. | US
+chars.net 76.223.54.146 VR:clean ASN:AS16509 Amazon.com, Inc. | US
+leading-hyphen.com VR:clean
+spaces.com 99.83.190.102 VR:clean ASN:AS16509 Amazon.com, Inc. | US
+hogwarts.wizarding.world 107.23.241.100 VR:clean ASN:AS14618 Amazon.com, Inc. | US
 stark-industries.marvel
-wakanda.africa 13.248.169.48 clean
+wakanda.africa 13.248.169.48 VR:clean ASN:AS16509 Amazon.com, Inc. | US
 aperture-science.portal
-minecraft.net 13.107.246.77 clean
+minecraft.net 13.107.246.77 VR:clean ASN:AS8075 Microsoft Corporation | US
 vault-tec.fallout
 umbrella-corp.resident
-test.org clean
-drive.example.net clean
-api.test.org clean
-server.net 193.160.30.2 clean
-mozilla.org 35.190.14.201 clean
-apache.org 151.101.2.132 clean
-docs.python.org 151.101.128.223 clean
-ebay.com 104.126.37.128 clean
-cnn.com 151.101.67.5 clean
-reuters.com 155.46.172.255 clean
-instagram.com 157.240.203.174 clean
-tiktok.com 199.203.60.25 clean
-gitlab.com 172.65.251.78 clean
-bitbucket.org 185.166.143.49 clean
-abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijk.com 185.53.178.73 clean
-example.net clean
-test.com 34.224.149.186 malicious
+test.org VR:clean
+drive.example.net VR:clean
+api.test.org VR:clean
+server.net 193.160.30.2 VR:clean ASN:AS60439 SERVERNET INTERNET LIMITED | GB
+mozilla.org 35.190.14.201 VR:clean ASN:AS396982 Google LLC | US
+apache.org 151.101.2.132 VR:clean ASN:AS54113 Fastly, Inc. | US
+docs.python.org 151.101.192.223 VR:clean ASN:AS54113 Fastly, Inc. | US
+ebay.com 23.36.162.218 VR:clean ASN:AS20940 Akamai International B.V. | DE
+cnn.com 151.101.67.5 VR:clean ASN:AS54113 Fastly, Inc. | US
+reuters.com 155.46.172.255 VR:clean ASN:AS4583 West Publishing Corporation | US
+instagram.com 157.240.203.174 VR:clean ASN:AS32934 Facebook, Inc. | IT
+tiktok.com 199.203.60.114 VR:clean ASN:AS1680 Cellcom Fixed Line Communication L.P | IL
+gitlab.com 172.65.251.78 VR:clean ASN:AS13335 Cloudflare, Inc. | US
+bitbucket.org 185.166.143.50 VR:clean ASN:AS16509 Amazon.com, Inc. | DE
+abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijk.com 185.53.178.73 VR:clean ASN:AS61969 Team Internet AG | DE
+example.net VR:clean
+test.com 34.224.149.186 VR:malicious ASN:AS14618 Amazon.com, Inc. | US
 localhost.localdomain
-123domain.com 216.34.94.177 clean
-domain123.org 146.103.45.4 clean
-99bottles.net 34.174.251.210 clean
-101computing.net 194.76.27.135 clean
+123domain.com 216.34.94.177 VR:clean ASN:AS3561 CenturyLink Communications, LLC | US
+domain123.org 146.103.45.4 VR:clean ASN:AS212238 Datacamp Limited | SG
+99bottles.net 34.174.251.210 VR:clean ASN:AS396982 Google LLC | US
+101computing.net 194.76.27.135 VR:clean ASN:AS35425 IOMART MANAGED SERVICES LIMITED | GB
