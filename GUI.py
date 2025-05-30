@@ -113,9 +113,9 @@ class DomainExtractorApp(ctk.CTk):
         self.result_text = tk.Text(self, width=80, height=18, bd=0, wrap="none")
         self.result_text.pack(padx=20, pady=(0, 20), fill="both", expand=True)
         # VT status tags
-        self.result_text.tag_configure("malicious", foreground="red")
-        self.result_text.tag_configure("suspicious", foreground="orange")
-        self.result_text.tag_configure("clean", foreground="green")
+        self.result_text.tag_configure("malicious", foreground="red", font=("TkDefaultFont", 10, "bold"))
+        self.result_text.tag_configure("suspicious", foreground="orange", font=("TkDefaultFont", 10, "bold"))
+        self.result_text.tag_configure("clean", foreground="green", font=("TkDefaultFont", 10, "bold"))
 
         # === Download Output.txt Button ===
         self.download_button = ctk.CTkButton(
@@ -234,14 +234,22 @@ class DomainExtractorApp(ctk.CTk):
                     line_wo_asn = line
                     if " ASN:" in line:
                         line_wo_asn = line.split(" ASN:")[0] + "\n"
-                    parts = line_wo_asn.strip().split()
                     vt_tag = None
+                    vt_str = None
                     for tag in ("malicious", "suspicious", "clean"):
-                        if any(f"VR:{tag}" in p for p in parts):
+                        vt_marker = f"VT:{tag}"
+                        if vt_marker in line_wo_asn:
                             vt_tag = tag
+                            vt_str = vt_marker
                             break
-                    if vt_tag:
-                        self.result_text.insert("end", line_wo_asn, vt_tag)
+                    if vt_tag and vt_str:
+                        vt_index = line_wo_asn.find(vt_str)
+                        # Insert text before VT:
+                        self.result_text.insert("end", line_wo_asn[:vt_index])
+                        # Insert VT:... with color tag
+                        self.result_text.insert("end", vt_str, vt_tag)
+                        # Insert the rest of the line
+                        self.result_text.insert("end", line_wo_asn[vt_index+len(vt_str):])
                     else:
                         self.result_text.insert("end", line_wo_asn)
                 self.download_button.configure(state="normal")

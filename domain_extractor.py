@@ -195,6 +195,12 @@ def process_file(input_file: str, output_file: str, vt_api_key: Optional[str] = 
         ip_address = get_domain_ip(domain)
         vt_status = check_domain_virustotal(domain, vt_api_key) if vt_api_key else None
 
+
+        # print statusAdd commentMore actions
+        status_msg = f"RESOLVES TO {ip_address}" if ip_address else "VALID FORMAT (NO IP)"
+        vt_msg = f" VT: {vt_status}" if vt_status else ""
+        print(f"Checking {domain}... {status_msg}{vt_msg}")
+
         line_parts = [domain]
 
         if ip_address:
@@ -203,7 +209,7 @@ def process_file(input_file: str, output_file: str, vt_api_key: Optional[str] = 
             line_parts.append("")  # keep column order
 
         if vt_status:
-            line_parts.append(f"VR:{vt_status}")
+            line_parts.append(f"VT:{vt_status}")
 
         if ip_address:
             asn_info = get_asn_info(ip_address)
