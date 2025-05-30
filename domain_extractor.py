@@ -146,16 +146,18 @@ def get_asn_info(ip: str) -> Optional[str]:
         resp = requests.get(f"https://ipinfo.io/{ip}/json", timeout=3)
         if resp.status_code == 200:
             data = resp.json()
+            hostname = data.get("hostname", "")
             org = data.get("org", "")
             country = data.get("country", "")
-            network = data.get("network", "")
+
             asn_info = []
+            if hostname:
+                asn_info.append(hostname)
             if org:
                 asn_info.append(org)
             if country:
                 asn_info.append(country)
-            if network:
-                asn_info.append(network)
+            
             return " | ".join(asn_info) if asn_info else None
         return None
     except Exception as e:
