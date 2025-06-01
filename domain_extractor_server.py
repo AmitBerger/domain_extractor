@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, send_from_directory, send_file
 from flask_cors import CORS
 import os
 import tempfile
-from domain_extractor import extract_domains, get_domain_ip, check_domain_virustotal
+from domain_extractor import extract_domains, get_domain_ip, check_domain_virustotal, get_asn_info
 import requests
 from typing import Optional
 
@@ -23,13 +23,25 @@ def process_domains(text):
         ip = get_domain_ip(domain)
         # always check VT if key present
         vt_status = check_domain_virustotal(domain, VT_API_KEY) if VT_API_KEY else None
+        asn_info = get_asn_info(ip) if ip else None
+
+        # Optionally, parse ASN info into a dict for easier frontend use
+        asn_dict = {}
+        if asn_info:
+            for part in asn_info.split(" | "):
+                if ":" in part:
+                    k, v = part.split(":", 1)
+                    asn_dict[k] = v
+                else:
+                    asn_dict["AS"] = part
 
         results.append({
             'domain': domain,
             'status': 'resolved' if ip else 'valid',
             'ip': ip,
             'id': domain.replace('.', '_'),
-            'vt_status': vt_status
+            'vt_status': vt_status,
+            'asn_info': asn_dict if asn_dict else None
         })
     
     return results
@@ -90,7 +102,25 @@ def download_results():
         data = request.get_json()
         results = data.get('results', [])
         
-        lines = [f"{r['domain']} {r['ip']}" if r.get('ip') else r['domain'] for r in results]
+        # Compose lines like the CLI output.txt
+        lines = []
+        for r in results:
+            line_parts = [r['domain']]
+            if r.get('ip'):
+                line_parts.append(r['ip'])
+            if r.get('vt_status'):
+                line_parts.append(f"VT:{r['vt_status']}")
+            if r.get('asn_info'):
+                # Join ASN info as a single string, like output.txt
+                asn_str = "ASN:" + " | ".join(
+                    f"{k}:{v}" if k != "AS" else v
+                    for k, v in r['asn_info'].items()
+                )
+                line_parts.append(asn_str)
+            # Only join non-empty parts
+            line = " ".join(part for part in line_parts if part)
+            lines.append(line)
+        
         content = '\n'.join(lines)
         
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:

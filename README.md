@@ -64,11 +64,11 @@ Complete! Found 115 valid domains.
 ### Output Format
 
 The output file contains one domain per line:
-- Domains that resolve to an IP address include the IP, VirusTotal status, and ASN info:  
-  `google.com 142.250.72.142 VR:clean ASN:AS15169 Google LLC | US`
+- Domains that resolve to an IP address include the IP, VirusTotal status, and **detailed ASN info**:  
+  `google.com 142.250.72.142 VT:clean ASN:AS15169 | ASNName:Google LLC | ASNCountry:US | ...`
 - Domains with valid format but no IP resolution:  
-  `example.org VR:clean`
-- **Note:** ASN info is only present in the downloaded output.txt file, not in the GUI or web display.
+  `example.org VT:clean`
+- **Note:** ASN info is only present in the downloaded output.txt file and in the web export, not in the GUI or web table display.
 
 ---
 
@@ -115,8 +115,9 @@ Then open your browser ➜ **http://127.0.0.1:5000**.
 **How to use:**
 1. Paste text or upload a file.
 2. Click **Extract**.
-3. View results in the browser (ASN info is hidden here).
-4. **Download the full output.txt** (with ASN info) using the "Download output.txt" button, which is enabled after extraction.
+3. View results in the browser (ASN info is shown in a collapsible section for each domain).
+4. **Download the full output.txt** (with detailed ASN info) using the "Download output.txt" button, which is enabled after extraction.  
+   The exported file now matches the CLI output format, including all ASN fields.
 
 ![web](https://github.com/user-attachments/assets/a2a536e3-038e-4b22-8c49-1c1a6d75efe0)
 
@@ -133,7 +134,7 @@ The Domain Extractor follows a three-step process:
    - Validates label start/end characters
    - Ensures proper TLD format
    - Confirms overall domain length (max 253 chars)
-3. **Resolution**: Attempts to resolve domains to IP addresses and fetches ASN info for resolved IPs (in output.txt only)
+3. **Resolution**: Attempts to resolve domains to IP addresses and fetches **detailed ASN info** for resolved IPs (in output.txt and web export only)
 
 ## 🌟 Examples
 

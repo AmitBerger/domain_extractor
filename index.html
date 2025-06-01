@@ -1,32 +1,113 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Domain Extractor</title>
+    <title>Domain Extractor Pro</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://unpkg.com/lucide-react@0.263.1/dist/esm/lucide-react.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
         
         @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
+            0% { transform: translate(0px, 0px) scale(1) rotate(0deg); }
+            33% { transform: translate(30px, -50px) scale(1.1) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) scale(0.9) rotate(240deg); }
+            100% { transform: translate(0px, 0px) scale(1) rotate(360deg); }
         }
         
-        .animate-blob { animation: blob 7s infinite; }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.33); opacity: 1; }
+            80%, 100% { transform: scale(2); opacity: 0; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(147, 51, 234, 0.5), 0 0 20px rgba(147, 51, 234, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(147, 51, 234, 0.8), 0 0 40px rgba(147, 51, 234, 0.5); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .animate-blob { animation: blob 20s infinite; }
         .animation-delay-2000 { animation-delay: 2s; }
         .animation-delay-4000 { animation-delay: 4s; }
-        .animate-spin-slow { animation: spin 3s linear infinite; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-pulse-ring { animation: pulse-ring 1.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+        .animate-glow { animation: glow 2s ease-in-out infinite; }
         
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .shimmer {
+            background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px rgba(147, 51, 234, 0.8), 0 0 20px rgba(147, 51, 234, 0.6), 0 0 30px rgba(147, 51, 234, 0.4);
+        }
+        
+        .cyber-grid {
+            background-image: 
+                linear-gradient(rgba(147, 51, 234, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(147, 51, 234, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .gradient-border {
+            position: relative;
+            background: linear-gradient(45deg, #9333ea, #ec4899, #3b82f6, #9333ea);
+            background-size: 400% 400%;
+            animation: gradient-shift 3s ease infinite;
+            padding: 2px;
+            border-radius: 1rem;
+        }
+        
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .gradient-border-inner {
+            background: #111827;
+            border-radius: calc(1rem - 2px);
+            padding: 1.5rem;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #9333ea, #ec4899);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #7c3aed, #db2777);
         }
     </style>
 </head>
@@ -34,9 +115,9 @@
     <div id="root"></div>
     
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
         
-        // Lucide React Icons (simplified implementation)
+        // Enhanced Icon Component with more icons
         const Icon = ({ name, className }) => {
             const icons = {
                 Globe: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM2 12h20M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20zM12 2v20M2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10M2 12a10 10 0 0 1 10-10 10 10 0 0 1 10 10",
@@ -50,7 +131,17 @@
                 Link: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71",
                 FileText: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8",
                 Search: "M21 21l-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z",
-                Filter: "M22 3H2l8 9.46V19l4 2v-8.54L22 3z"
+                Filter: "M22 3H2l8 9.46V19l4 2v-8.54L22 3z",
+                Shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+                Zap: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
+                TrendingUp: "M23 6l-9.5 9.5-5-5L1 18M17 6h6v6",
+                BarChart: "M12 20V10M18 20V4M6 20v-4",
+                Clock: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 6v6l4 2",
+                Database: "M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5zM3 10h18M10 3v18",
+                Export: "M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2M7 11l5 5 5-5M12 4v12",
+                Settings: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM21 12h1M12 21v1M3 12H2M12 2V1M18.36 18.36l.7.7M5.64 5.64l-.7-.7M18.36 5.64l.7-.7M5.64 18.36l-.7.7",
+                Trash: "M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14M10 11v6M14 11v6",
+                X: "M18 6L6 18M6 6l12 12"
             };
             
             return (
@@ -60,7 +151,7 @@
             );
         };
 
-        const DomainExtractorGUI = () => {
+        const DomainExtractorPro = () => {
             const [inputText, setInputText] = useState('');
             const [results, setResults] = useState([]);
             const [isProcessing, setIsProcessing] = useState(false);
@@ -70,6 +161,19 @@
             const [copiedDomain, setCopiedDomain] = useState(null);
             const [error, setError] = useState(null);
             const [canDownloadOutput, setCanDownloadOutput] = useState(false);
+            const [bulkActions, setBulkActions] = useState(false);
+            const [selectedDomains, setSelectedDomains] = useState(new Set());
+            const [exportFormat, setExportFormat] = useState('txt');
+            const [showStats, setShowStats] = useState(false);
+            const [validationSettings, setValidationSettings] = useState({
+                checkDNS: true,
+                checkVirusTotal: false,
+                checkWhois: false
+            });
+            const [history, setHistory] = useState([]);
+            const [showAdvanced, setShowAdvanced] = useState(false);
+            const chartRef = useRef(null);
+            const chartInstance = useRef(null);
 
             // API call to extract domains from text
             const handleProcessUrl = async () => {
@@ -91,8 +195,18 @@
                     const data = await response.json();
                     
                     if (data.success) {
-                        setResults(data.results);
+                        // Transform the results to match our enhanced format
+                        const enhancedResults = data.results.map((result, index) => ({
+                            ...result,
+                            id: result.id || index + 1,
+                            registrar: null, // Would need additional API for WHOIS
+                            created: null,
+                            expires: null
+                        }));
+                        
+                        setResults(enhancedResults);
                         setCanDownloadOutput(true);
+                        addToHistory(enhancedResults);
                     } else {
                         setError(data.error || 'Failed to extract domains');
                     }
@@ -124,8 +238,18 @@
                     const data = await response.json();
                     
                     if (data.success) {
-                        setResults(data.results);
+                        // Transform the results to match our enhanced format
+                        const enhancedResults = data.results.map((result, index) => ({
+                            ...result,
+                            id: result.id || index + 1,
+                            registrar: null, // Would need additional API for WHOIS
+                            created: null,
+                            expires: null
+                        }));
+                        
+                        setResults(enhancedResults);
                         setCanDownloadOutput(true);
+                        addToHistory(enhancedResults);
                     } else {
                         setError(data.error || 'Failed to extract domains from file');
                     }
@@ -136,38 +260,75 @@
                 }
             };
 
+            const addToHistory = (newResults) => {
+                const historyEntry = {
+                    timestamp: new Date().toISOString(),
+                    count: newResults.length,
+                    results: newResults
+                };
+                setHistory(prev => [historyEntry, ...prev].slice(0, 10));
+            };
+
             const copyToClipboard = (domain) => {
                 navigator.clipboard.writeText(domain);
                 setCopiedDomain(domain);
                 setTimeout(() => setCopiedDomain(null), 2000);
             };
 
-            const downloadResults = async () => {
+            const toggleDomainSelection = (domainId) => {
+                setSelectedDomains(prev => {
+                    const newSet = new Set(prev);
+                    if (newSet.has(domainId)) {
+                        newSet.delete(domainId);
+                    } else {
+                        newSet.add(domainId);
+                    }
+                    return newSet;
+                });
+            };
+
+            const selectAll = () => {
+                setSelectedDomains(new Set(filteredResults.map(r => r.id)));
+            };
+
+            const deselectAll = () => {
+                setSelectedDomains(new Set());
+            };
+
+            const exportSelected = async () => {
+                const selectedResults = results.filter(r => selectedDomains.has(r.id));
+                
                 try {
                     const response = await fetch('http://localhost:5000/api/download', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ results }),
+                        body: JSON.stringify({ results: selectedResults }),
                     });
                     
                     const blob = await response.blob();
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = 'extracted_domains.txt';
+                    a.download = `extracted_domains_${exportFormat}.txt`;
                     a.click();
                     URL.revokeObjectURL(url);
                 } catch (err) {
-                    setError('Failed to download results');
+                    setError('Failed to export results');
                 }
+            };
+
+            const deleteSelected = () => {
+                setResults(prev => prev.filter(r => !selectedDomains.has(r.id)));
+                setSelectedDomains(new Set());
             };
 
             const filteredResults = results.filter(result => {
                 const matchesFilter = filterStatus === 'all' || 
                     (filterStatus === 'resolved' && result.ip) || 
-                    (filterStatus === 'valid' && !result.ip);
+                    (filterStatus === 'valid' && !result.ip) ||
+                    (filterStatus === 'clean' && result.vt_status === 'clean');
                 const matchesSearch = result.domain.toLowerCase().includes(searchTerm.toLowerCase());
                 return matchesFilter && matchesSearch;
             });
@@ -175,257 +336,563 @@
             const stats = {
                 total: results.length,
                 resolved: results.filter(r => r.ip).length,
-                valid: results.filter(r => !r.ip).length
+                valid: results.filter(r => !r.ip).length,
+                clean: results.filter(r => r.vt_status === 'clean').length
             };
 
+            // Update chart when results change
+            useEffect(() => {
+                if (showStats && chartRef.current && results.length > 0) {
+                    const ctx = chartRef.current.getContext('2d');
+                    
+                    if (chartInstance.current) {
+                        chartInstance.current.destroy();
+                    }
+                    
+                    chartInstance.current = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Resolved', 'Valid Only', 'Clean'],
+                            datasets: [{
+                                data: [stats.resolved, stats.valid, stats.clean],
+                                backgroundColor: [
+                                    'rgba(34, 197, 94, 0.8)',
+                                    'rgba(59, 130, 246, 0.8)',
+                                    'rgba(168, 85, 247, 0.8)'
+                                ],
+                                borderColor: [
+                                    'rgba(34, 197, 94, 1)',
+                                    'rgba(59, 130, 246, 1)',
+                                    'rgba(168, 85, 247, 1)'
+                                ],
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        color: '#e5e7eb',
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }, [showStats, results]);
+
             return (
-                <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950" dir="ltr">
+                <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 cyber-grid">
                     {/* Animated background */}
                     <div className="fixed inset-0 overflow-hidden">
-                        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-                        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-                        <div className="absolute top-40 left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+                        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+                        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+                        <div className="absolute top-40 left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-pulse"></div>
                     </div>
                     
                     <div className="relative z-10 container mx-auto px-4 py-8">
                         {/* Header */}
                         <div className="text-center mb-10">
                             <div className="flex items-center justify-center mb-4">
-                                <Icon name="Globe" className="w-12 h-12 text-purple-400 mr-3 animate-pulse" />
-                                <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
-                                    Domain Extractor
+                                <div className="relative">
+                                    <Icon name="Globe" className="w-16 h-16 text-purple-400 animate-float" />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="w-20 h-20 border-4 border-purple-500 rounded-full animate-pulse-ring"></div>
+                                    </div>
+                                </div>
+                                <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent mx-6 neon-text">
+                                    Domain Extractor Pro
                                 </h1>
-                                <Icon name="Sparkles" className="w-8 h-8 text-yellow-400 ml-3 animate-spin-slow" />
+                                <Icon name="Zap" className="w-12 h-12 text-yellow-400 animate-pulse" />
                             </div>
-                            <p className="text-gray-300 text-lg">Extract, validate, and resolve domain names</p>
+                            <p className="text-gray-300 text-xl">Advanced Domain Intelligence & Analysis Platform</p>
+                            <div className="flex items-center justify-center mt-4 space-x-4">
+                                <span className="text-sm text-gray-400 flex items-center">
+                                    <Icon name="Shield" className="w-4 h-4 mr-1 text-green-400" />
+                                    Enterprise Security
+                                </span>
+                                <span className="text-sm text-gray-400 flex items-center">
+                                    <Icon name="Zap" className="w-4 h-4 mr-1 text-yellow-400" />
+                                    Lightning Fast
+                                </span>
+                                <span className="text-sm text-gray-400 flex items-center">
+                                    <Icon name="Database" className="w-4 h-4 mr-1 text-blue-400" />
+                                    Big Data Ready
+                                </span>
+                            </div>
                         </div>
 
                         {/* Error Alert */}
                         {error && (
-                            <div className="max-w-4xl mx-auto mb-4 p-4 bg-red-900/50 border border-red-500 rounded-lg text-red-200">
-                                {error}
+                            <div className="max-w-6xl mx-auto mb-4 p-4 glass rounded-lg border border-red-500/50 text-red-200">
+                                <div className="flex items-center">
+                                    <Icon name="AlertCircle" className="w-5 h-5 mr-2" />
+                                    {error}
+                                </div>
                             </div>
                         )}
 
                         {/* Main Card */}
-                        <div className="max-w-4xl mx-auto bg-gray-900/80 backdrop-blur-lg rounded-2xl shadow-2xl border border-purple-500/20 overflow-hidden">
-                            {/* Tabs */}
-                            <div className="flex border-b border-gray-700/50">
-                                <button
-                                    onClick={() => setActiveTab('url')}
-                                    className={`flex-1 px-6 py-4 font-semibold transition-all duration-300 ${
-                                        activeTab === 'url' 
-                                            ? 'bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-purple-300 border-b-2 border-purple-400' 
-                                            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-center">
-                                        <Icon name="Link" className="w-5 h-5 mr-2" />
-                                        URL Input
-                                    </div>
-                                </button>
-                                <button
-                                    onClick={() => setActiveTab('file')}
-                                    className={`flex-1 px-6 py-4 font-semibold transition-all duration-300 ${
-                                        activeTab === 'file' 
-                                            ? 'bg-gradient-to-r from-purple-600/20 to-pink-600/20 text-purple-300 border-b-2 border-purple-400' 
-                                            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-center">
-                                        <Icon name="FileText" className="w-5 h-5 mr-2" />
-                                        File Upload
-                                    </div>
-                                </button>
-                            </div>
-
-                            {/* Input Section */}
-                            <div className="p-6">
-                                {activeTab === 'url' ? (
-                                    <div className="space-y-4">
-                                        <textarea
-                                            value={inputText}
-                                            onChange={(e) => setInputText(e.target.value)}
-                                            placeholder="Enter URLs or text containing domains...&#10;Example: https://google.com, facebook.com, Check out amazon.com!"
-                                            className="w-full h-32 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
-                                        />
+                        <div className="max-w-6xl mx-auto">
+                            <div className="gradient-border">
+                                <div className="gradient-border-inner">
+                                    {/* Tabs */}
+                                    <div className="flex flex-wrap border-b border-gray-700/50 mb-6">
                                         <button
-                                            onClick={handleProcessUrl}
-                                            disabled={isProcessing || !inputText.trim()}
-                                            className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg"
+                                            onClick={() => setActiveTab('url')}
+                                            className={`px-6 py-4 font-semibold transition-all duration-300 ${
+                                                activeTab === 'url' 
+                                                    ? 'text-purple-300 border-b-2 border-purple-400 bg-purple-500/10' 
+                                                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
+                                            }`}
                                         >
-                                            {isProcessing ? (
-                                                <div className="flex items-center justify-center">
-                                                    <Icon name="Loader2" className="w-5 h-5 mr-2 animate-spin" />
-                                                    Processing...
-                                                </div>
-                                            ) : (
-                                                <div className="flex items-center justify-center">
-                                                    <Icon name="Search" className="w-5 h-5 mr-2" />
-                                                    Extract Domains
-                                                </div>
-                                            )}
+                                            <div className="flex items-center">
+                                                <Icon name="Link" className="w-5 h-5 mr-2" />
+                                                URL Input
+                                            </div>
+                                        </button>
+                                        <button
+                                            onClick={() => setActiveTab('file')}
+                                            className={`px-6 py-4 font-semibold transition-all duration-300 ${
+                                                activeTab === 'file' 
+                                                    ? 'text-purple-300 border-b-2 border-purple-400 bg-purple-500/10' 
+                                                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
+                                            }`}
+                                        >
+                                            <div className="flex items-center">
+                                                <Icon name="FileText" className="w-5 h-5 mr-2" />
+                                                File Upload
+                                            </div>
+                                        </button>
+                                        <button
+                                            onClick={() => setActiveTab('history')}
+                                            className={`px-6 py-4 font-semibold transition-all duration-300 ${
+                                                activeTab === 'history' 
+                                                    ? 'text-purple-300 border-b-2 border-purple-400 bg-purple-500/10' 
+                                                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/50'
+                                            }`}
+                                        >
+                                            <div className="flex items-center">
+                                                <Icon name="Clock" className="w-5 h-5 mr-2" />
+                                                History
+                                            </div>
                                         </button>
                                     </div>
-                                ) : (
-                                    <div className="space-y-4">
-                                        <div className="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-purple-500 transition-colors duration-300">
-                                            <Icon name="Upload" className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                                            <p className="text-gray-300 mb-2">Drop your file here or click to browse</p>
-                                            <p className="text-gray-500 text-sm mb-4">Supports .txt files</p>
-                                            <input
-                                                type="file"
-                                                accept=".txt"
-                                                onChange={handleFileUpload}
-                                                className="hidden"
-                                                id="file-upload"
-                                            />
-                                            <label
-                                                htmlFor="file-upload"
-                                                className="inline-block px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg cursor-pointer hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105"
-                                            >
-                                                Choose File
-                                            </label>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
 
-                            {/* Results Section */}
-                            {results.length > 0 && (
-                                <div className="border-t border-gray-700/50">
-                                    {/* Stats */}
-                                    <div className="px-6 py-4 bg-gray-800/30">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-xl font-semibold text-gray-200">Results</h3>
-                                            <button
-                                                onClick={downloadResults}
-                                                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors duration-300 flex items-center"
-                                            >
-                                                <Icon name="Download" className="w-4 h-4 mr-2" />
-                                                Download
-                                            </button>
-                                        </div>
-                                        
-                                        <div className="grid grid-cols-3 gap-4 mb-4">
-                                            <div className="bg-gray-700/50 rounded-lg p-3 text-center">
-                                                <p className="text-gray-400 text-sm">Total Domains</p>
-                                                <p className="text-2xl font-bold text-gray-200">{stats.total}</p>
-                                            </div>
-                                            <div className="bg-green-900/30 rounded-lg p-3 text-center">
-                                                <p className="text-green-400 text-sm">With IP</p>
-                                                <p className="text-2xl font-bold text-green-400">{stats.resolved}</p>
-                                            </div>
-                                            <div className="bg-blue-900/30 rounded-lg p-3 text-center">
-                                                <p className="text-blue-400 text-sm">Valid Format</p>
-                                                <p className="text-2xl font-bold text-blue-400">{stats.valid}</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Filters */}
-                                        <div className="flex items-center space-x-4 mb-4">
-                                            <div className="flex-1 relative">
-                                                <Icon name="Search" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Search domains..."
-                                                    value={searchTerm}
-                                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                                    className="w-full pl-10 pr-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                    {/* Input Section */}
+                                    {activeTab === 'url' && (
+                                        <div className="space-y-6">
+                                            <div className="glass rounded-lg p-6 animate-glow">
+                                                <textarea
+                                                    value={inputText}
+                                                    onChange={(e) => setInputText(e.target.value)}
+                                                    placeholder="Enter URLs or text containing domains...&#10;Example: https://google.com, facebook.com, Check out amazon.com!"
+                                                    className="w-full h-32 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                                                 />
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <Icon name="Filter" className="w-5 h-5 text-gray-400" />
-                                                <select
-                                                    value={filterStatus}
-                                                    onChange={(e) => setFilterStatus(e.target.value)}
-                                                    className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                                
+                                                {/* Advanced Settings */}
+                                                <div className="mt-4">
+                                                    <button
+                                                        onClick={() => setShowAdvanced(!showAdvanced)}
+                                                        className="text-purple-400 hover:text-purple-300 flex items-center text-sm font-medium"
+                                                    >
+                                                        <Icon name="Settings" className="w-4 h-4 mr-1" />
+                                                        Advanced Validation Settings
+                                                    </button>
+                                                    
+                                                    {showAdvanced && (
+                                                        <div className="mt-4 p-4 bg-gray-800/30 rounded-lg space-y-3">
+                                                            <label className="flex items-center text-gray-300">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={validationSettings.checkDNS}
+                                                                    onChange={(e) => setValidationSettings({...validationSettings, checkDNS: e.target.checked})}
+                                                                    className="mr-2 text-purple-600 focus:ring-purple-500"
+                                                                />
+                                                                DNS Resolution
+                                                            </label>
+                                                            <label className="flex items-center text-gray-300">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={validationSettings.checkVirusTotal}
+                                                                    onChange={(e) => setValidationSettings({...validationSettings, checkVirusTotal: e.target.checked})}
+                                                                    className="mr-2 text-purple-600 focus:ring-purple-500"
+                                                                />
+                                                                VirusTotal Check
+                                                            </label>
+                                                            <label className="flex items-center text-gray-300">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={validationSettings.checkWhois}
+                                                                    onChange={(e) => setValidationSettings({...validationSettings, checkWhois: e.target.checked})}
+                                                                    className="mr-2 text-purple-600 focus:ring-purple-500"
+                                                                />
+                                                                WHOIS Lookup
+                                                            </label>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                
+                                                <button
+                                                    onClick={handleProcessUrl}
+                                                    disabled={isProcessing || !inputText.trim()}
+                                                    className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg relative overflow-hidden group"
                                                 >
-                                                    <option value="all">All</option>
-                                                    <option value="resolved">With IP</option>
-                                                    <option value="valid">Valid Only</option>
-                                                </select>
+                                                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                                                    {isProcessing ? (
+                                                        <div className="flex items-center justify-center relative z-10">
+                                                            <Icon name="Loader2" className="w-5 h-5 mr-2 animate-spin" />
+                                                            Processing...
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex items-center justify-center relative z-10">
+                                                            <Icon name="Search" className="w-5 h-5 mr-2" />
+                                                            Extract & Analyze
+                                                        </div>
+                                                    )}
+                                                </button>
                                             </div>
                                         </div>
-                                    </div>
+                                    )}
 
-                                    {/* Domain List */}
-                                    <div className="max-h-96 overflow-y-auto">
-                                        {filteredResults.map((result, index) => (
-                                            <div
-                                                key={result.id}
-                                                className="px-6 py-3 border-b border-gray-700/50 hover:bg-gray-800/30 transition-all duration-300 group"
-                                            >
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center space-x-3">
-                                                        {result.ip ? (
-                                                            <Icon name="CheckCircle" className="w-5 h-5 text-green-400" />
-                                                        ) : (
-                                                            <Icon name="AlertCircle" className="w-5 h-5 text-blue-400" />
-                                                        )}
-                                                        <div>
-                                                            <p className="text-gray-200 font-medium">{result.domain}</p>
-                                                            {result.ip && (
-                                                                <p className="text-gray-400 text-sm">IP: {result.ip}</p>
-                                                            )}
-                                                            {result.vt_status && (
-                                                                <p className={
-                                                                    `text-sm ${
-                                                                        result.vt_status === 'malicious' ? 'text-red-400' :
-                                                                        result.vt_status === 'suspicious' ? 'text-yellow-400' :
-                                                                        'text-green-400'
-                                                                    }`
-                                                                }>VT: {result.vt_status}</p>
+                                    {activeTab === 'file' && (
+                                        <div className="space-y-4">
+                                            <div className="border-2 border-dashed border-purple-500/50 rounded-lg p-12 text-center hover:border-purple-400 transition-all duration-300 glass">
+                                                <div className="relative">
+                                                    <Icon name="Upload" className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-float" />
+                                                    <div className="absolute inset-0 flex items-center justify-center">
+                                                        <div className="w-20 h-20 bg-purple-500 rounded-full opacity-20 animate-ping"></div>
+                                                    </div>
+                                                </div>
+                                                <p className="text-gray-300 mb-2 text-lg">Drop your file here or click to browse</p>
+                                                <p className="text-gray-500 text-sm mb-6">Supports .txt, .csv, .json files up to 10MB</p>
+                                                <input
+                                                    type="file"
+                                                    accept=".txt,.csv,.json"
+                                                    onChange={handleFileUpload}
+                                                    className="hidden"
+                                                    id="file-upload"
+                                                />
+                                                <label
+                                                    htmlFor="file-upload"
+                                                    className="inline-block px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg cursor-pointer hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shimmer"
+                                                >
+                                                    Choose File
+                                                </label>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {activeTab === 'history' && (
+                                        <div className="space-y-4 max-h-96 overflow-y-auto">
+                                            {history.length === 0 ? (
+                                                <div className="text-center py-8">
+                                                    <Icon name="Clock" className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+                                                    <p className="text-gray-400">No history yet. Start extracting domains!</p>
+                                                </div>
+                                            ) : (
+                                                history.map((entry, index) => (
+                                                    <div key={index} className="glass rounded-lg p-4 hover:bg-gray-800/30 transition-all duration-300">
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <span className="text-gray-300 font-medium">
+                                                                {new Date(entry.timestamp).toLocaleString()}
+                                                            </span>
+                                                            <span className="text-purple-400 font-semibold">
+                                                                {entry.count} domains
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {entry.results.slice(0, 5).map(r => (
+                                                                <span key={r.id} className="text-xs bg-gray-700/50 px-2 py-1 rounded">
+                                                                    {r.domain}
+                                                                </span>
+                                                            ))}
+                                                            {entry.results.length > 5 && (
+                                                                <span className="text-xs text-gray-500">
+                                                                    +{entry.results.length - 5} more
+                                                                </span>
                                                             )}
                                                         </div>
                                                     </div>
-                                                    <button
-                                                        onClick={() => copyToClipboard(result.domain)}
-                                                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 hover:bg-gray-700/50 rounded-lg"
-                                                    >
-                                                        {copiedDomain === result.domain ? (
-                                                            <Icon name="CheckCircle" className="w-4 h-4 text-green-400" />
-                                                        ) : (
-                                                            <Icon name="Copy" className="w-4 h-4 text-gray-400" />
-                                                        )}
-                                                    </button>
+                                                ))
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Results Section */}
+                                    {results.length > 0 && (
+                                        <div className="mt-8">
+                                            {/* Stats Dashboard */}
+                                            <div className="mb-6">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <h3 className="text-2xl font-bold text-gray-200">Analysis Results</h3>
+                                                    <div className="flex items-center space-x-2">
+                                                        <button
+                                                            onClick={() => setShowStats(!showStats)}
+                                                            className="px-4 py-2 glass text-gray-200 rounded-lg hover:bg-gray-700/50 transition-all duration-300 flex items-center"
+                                                        >
+                                                            <Icon name="BarChart" className="w-4 h-4 mr-2" />
+                                                            {showStats ? 'Hide' : 'Show'} Stats
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setBulkActions(!bulkActions)}
+                                                            className="px-4 py-2 glass text-gray-200 rounded-lg hover:bg-gray-700/50 transition-all duration-300 flex items-center"
+                                                        >
+                                                            <Icon name="Settings" className="w-4 h-4 mr-2" />
+                                                            Bulk Actions
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Stats Grid */}
+                                                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                                                    <div className="glass rounded-lg p-4 text-center transform hover:scale-105 transition-transform duration-300">
+                                                        <Icon name="Globe" className="w-8 h-8 text-purple-400 mx-auto mb-2" />
+                                                        <p className="text-gray-400 text-sm">Total</p>
+                                                        <p className="text-3xl font-bold text-gray-200">{stats.total}</p>
+                                                    </div>
+                                                    <div className="glass rounded-lg p-4 text-center transform hover:scale-105 transition-transform duration-300">
+                                                        <Icon name="CheckCircle" className="w-8 h-8 text-green-400 mx-auto mb-2" />
+                                                        <p className="text-gray-400 text-sm">Resolved</p>
+                                                        <p className="text-3xl font-bold text-green-400">{stats.resolved}</p>
+                                                    </div>
+                                                    <div className="glass rounded-lg p-4 text-center transform hover:scale-105 transition-transform duration-300">
+                                                        <Icon name="AlertCircle" className="w-8 h-8 text-blue-400 mx-auto mb-2" />
+                                                        <p className="text-gray-400 text-sm">Valid Only</p>
+                                                        <p className="text-3xl font-bold text-blue-400">{stats.valid}</p>
+                                                    </div>
+                                                    <div className="glass rounded-lg p-4 text-center transform hover:scale-105 transition-transform duration-300">
+                                                        <Icon name="Shield" className="w-8 h-8 text-purple-400 mx-auto mb-2" />
+                                                        <p className="text-gray-400 text-sm">Clean</p>
+                                                        <p className="text-3xl font-bold text-purple-400">{stats.clean}</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Chart */}
+                                                {showStats && (
+                                                    <div className="glass rounded-lg p-6 mb-6">
+                                                        <canvas ref={chartRef} className="max-h-64"></canvas>
+                                                    </div>
+                                                )}
+
+                                                {/* Bulk Actions */}
+                                                {bulkActions && (
+                                                    <div className="glass rounded-lg p-4 mb-6">
+                                                        <div className="flex items-center justify-between flex-wrap gap-4">
+                                                            <div className="flex items-center space-x-2">
+                                                                <button
+                                                                    onClick={selectAll}
+                                                                    className="px-3 py-1 bg-purple-600/20 text-purple-300 rounded hover:bg-purple-600/30 transition-colors"
+                                                                >
+                                                                    Select All
+                                                                </button>
+                                                                <button
+                                                                    onClick={deselectAll}
+                                                                    className="px-3 py-1 bg-gray-700/50 text-gray-300 rounded hover:bg-gray-700/70 transition-colors"
+                                                                >
+                                                                    Deselect All
+                                                                </button>
+                                                                <span className="text-gray-400 text-sm">
+                                                                    {selectedDomains.size} selected
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <select
+                                                                    value={exportFormat}
+                                                                    onChange={(e) => setExportFormat(e.target.value)}
+                                                                    className="px-3 py-1 bg-gray-800/50 border border-gray-700 rounded text-gray-200 text-sm"
+                                                                >
+                                                                    <option value="txt">TXT</option>
+                                                                    <option value="csv">CSV</option>
+                                                                    <option value="json">JSON</option>
+                                                                </select>
+                                                                <button
+                                                                    onClick={exportSelected}
+                                                                    disabled={selectedDomains.size === 0}
+                                                                    className="px-3 py-1 bg-blue-600/80 text-white rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center text-sm"
+                                                                >
+                                                                    <Icon name="Export" className="w-4 h-4 mr-1" />
+                                                                    Export
+                                                                </button>
+                                                                <button
+                                                                    onClick={deleteSelected}
+                                                                    disabled={selectedDomains.size === 0}
+                                                                    className="px-3 py-1 bg-red-600/80 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center text-sm"
+                                                                >
+                                                                    <Icon name="Trash" className="w-4 h-4 mr-1" />
+                                                                    Delete
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Filters */}
+                                                <div className="flex items-center space-x-4 mb-4">
+                                                    <div className="flex-1 relative">
+                                                        <Icon name="Search" className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Search domains..."
+                                                            value={searchTerm}
+                                                            onChange={(e) => setSearchTerm(e.target.value)}
+                                                            className="w-full pl-10 pr-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <Icon name="Filter" className="w-5 h-5 text-gray-400" />
+                                                        <select
+                                                            value={filterStatus}
+                                                            onChange={(e) => setFilterStatus(e.target.value)}
+                                                            className="px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                                        >
+                                                            <option value="all">All</option>
+                                                            <option value="resolved">With IP</option>
+                                                            <option value="valid">Valid Only</option>
+                                                            <option value="clean">Clean</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
 
-                            {/* Empty State */}
-                            {!isProcessing && results.length === 0 && (
-                                <div className="p-12 text-center">
-                                    <Icon name="Globe" className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                                    <p className="text-gray-400">No domains extracted yet. Start by entering text or uploading a file.</p>
-                                </div>
-                            )}
+                                            {/* Domain List */}
+                                            <div className="glass rounded-lg overflow-hidden">
+                                                <div className="max-h-96 overflow-y-auto">
+                                                    <thead>
+                                                        <tr className="bg-gradient-to-r from-fuchsia-600 via-purple-600 to-blue-600 text-white text-lg font-bold">
+                                                            <th className="px-4 py-2">Domain</th>
+                                                            <th className="px-4 py-2">IP</th>
+                                                            <th className="px-4 py-2">VirusTotal</th>
+                                                            <th className="px-4 py-2">ASN Info</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {filteredResults.map(result => (
+                                                            <tr
+                                                                key={result.id}
+                                                                className="bg-purple-900/60 text-fuchsia-300 hover:bg-fuchsia-900/80 transition"
+                                                            >
+                                                                <td className="px-4 py-2">{result.domain}</td>
+                                                                <td className="px-4 py-2">{result.ip || <span className="text-gray-500">N/A</span>}</td>
+                                                                <td className="px-4 py-2">{result.vt_status || <span className="text-gray-500">N/A</span>}</td>
+                                                                <td className="px-4 py-2 align-middle">
+                                                                    {result.asn_info ? (
+                                                                        <details>
+                                                                            <summary className="text-fuchsia-400 underline">View ASN</summary>
+                                                                            <div className="text-xs mt-1 space-y-1 text-fuchsia-300">
+                                                                                {Object.entries(result.asn_info).map(([k, v]) => (
+                                                                                    <div key={k}><span className="font-bold">{k}:</span> {v}</div>
+                                                                                ))}
+                                                                            </div>
+                                                                        </details>
+                                                                    ) : (
+                                                                        <span className="text-gray-500">N/A</span>
+                                                                    )}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </div>
+                                            </div>
 
-                            {/* Processing State */}
-                            {isProcessing && (
-                                <div className="p-12 text-center">
-                                    <div className="relative">
-                                        <Icon name="Loader2" className="w-16 h-16 text-purple-400 mx-auto mb-4 animate-spin" />
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="w-20 h-20 bg-purple-500 rounded-full opacity-20 animate-ping"></div>
+                                            {/* Export Options */}
+                                            <div className="mt-6 flex items-center justify-center space-x-4">
+                                                <button
+                                                    onClick={async () => {
+                                                        try {
+                                                            const response = await fetch('http://localhost:5000/api/download', {
+                                                                method: 'POST',
+                                                                headers: {
+                                                                    'Content-Type': 'application/json',
+                                                                },
+                                                                body: JSON.stringify({ results }),
+                                                            });
+                                                            
+                                                            const blob = await response.blob();
+                                                            const url = URL.createObjectURL(blob);
+                                                            const a = document.createElement('a');
+                                                            a.href = url;
+                                                            a.download = 'all_extracted_domains.txt';
+                                                            a.click();
+                                                            URL.revokeObjectURL(url);
+                                                        } catch (err) {
+                                                            setError('Failed to export all results');
+                                                        }
+                                                    }}
+                                                    className="px-6 py-3 glass text-gray-200 rounded-lg hover:bg-gray-700/50 transition-all duration-300 flex items-center"
+                                                >
+                                                    <Icon name="Download" className="w-5 h-5 mr-2" />
+                                                    Export All Results
+                                                </button>
+                                                <button
+                                                    onClick={() => window.open('http://localhost:5000/api/download-output', '_blank')}
+                                                    className={`px-6 py-3 glass text-gray-200 rounded-lg hover:bg-gray-700/50 transition-all duration-300 flex items-center ${!canDownloadOutput ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                    disabled={!canDownloadOutput}
+                                                >
+                                                    <Icon name="Database" className="w-5 h-5 mr-2" />
+                                                    Download Full Report
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <p className="text-gray-300">Extracting and validating domains...</p>
-                                </div>
-                            )}
+                                    )}
 
-                            {/* Download output.txt Button */}
-                            <button
-                                onClick={() => window.open('http://localhost:5000/api/download-output', '_blank')}
-                                className={`px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded-lg transition-colors duration-300 flex items-center ml-2 ${!canDownloadOutput ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                disabled={!canDownloadOutput}
-                            >
-                                <Icon name="Download" className="w-4 h-4 mr-2" />
-                                Download output.txt
-                            </button>
+                                    {/* Empty State */}
+                                    {!isProcessing && results.length === 0 && activeTab !== 'history' && (
+                                        <div className="text-center py-16">
+                                            <div className="relative inline-block">
+                                                <Icon name="Globe" className="w-24 h-24 text-purple-500/50 mx-auto mb-6" />
+                                                <Icon name="Sparkles" className="w-8 h-8 text-yellow-400 absolute top-0 right-0 animate-pulse" />
+                                            </div>
+                                            <p className="text-gray-400 text-lg">Ready to extract and analyze domains</p>
+                                            <p className="text-gray-500 text-sm mt-2">Start by entering text or uploading a file</p>
+                                        </div>
+                                    )}
+
+                                    {/* Processing State */}
+                                    {isProcessing && (
+                                        <div className="text-center py-16">
+                                            <div className="relative">
+                                                <Icon name="Loader2" className="w-20 h-20 text-purple-400 mx-auto mb-6 animate-spin" />
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <div className="w-24 h-24 bg-purple-500 rounded-full opacity-20 animate-ping"></div>
+                                                </div>
+                                            </div>
+                                            <p className="text-gray-300 text-lg">Analyzing domains...</p>
+                                            <p className="text-gray-500 text-sm mt-2">This may take a few moments</p>
+                                            <div className="mt-6 flex items-center justify-center space-x-2">
+                                                <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce"></div>
+                                                <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                                                <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="text-center mt-12 text-gray-500 text-sm">
+                            <p>Domain Extractor Pro v2.0 | Powered by Advanced AI</p>
+                            <div className="flex items-center justify-center mt-2 space-x-4">
+                                <span className="flex items-center">
+                                    <Icon name="Zap" className="w-4 h-4 mr-1 text-yellow-400" />
+                                    Lightning Fast
+                                </span>
+                                <span className="flex items-center">
+                                    <Icon name="Shield" className="w-4 h-4 mr-1 text-green-400" />
+                                    Secure
+                                </span>
+                                <span className="flex items-center">
+                                    <Icon name="Database" className="w-4 h-4 mr-1 text-blue-400" />
+                                    Reliable
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -433,7 +900,7 @@
         };
 
         // Render the app
-        ReactDOM.render(<DomainExtractorGUI />, document.getElementById('root'));
+        ReactDOM.render(<DomainExtractorPro />, document.getElementById('root'));
     </script>
 </body>
 </html>

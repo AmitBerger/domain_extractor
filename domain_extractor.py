@@ -139,26 +139,76 @@ def check_domain_virustotal(domain: str, api_key: str) -> Optional[str]:
 
 def get_asn_info(ip: str) -> Optional[str]:
     """
-    Get ASN info for an IP address using ipinfo.io (no API key required for basic info).
-    Returns a string with ASN, org, country, and network if available.
+    Get very detailed ASN info for an IP address using bgpview.io (no API key required).
+    Returns a string with ASN, org, country, prefix, registry, allocation date, ASN description, type, website, and more if available.
     """
     try:
-        resp = requests.get(f"https://ipinfo.io/{ip}/json", timeout=3)
+        resp = requests.get(f"https://api.bgpview.io/ip/{ip}", timeout=3)
         if resp.status_code == 200:
             data = resp.json()
-            hostname = data.get("hostname", "")
-            org = data.get("org", "")
-            country = data.get("country", "")
+            asn_data = data.get("data", {}).get("prefixes", [])
+            if asn_data:
+                prefix_info = asn_data[0]
+                asn_info_dict = prefix_info.get("asn", {})
+                # ASN fields
+                asn = asn_info_dict.get("asn", "")
+                asn_name = asn_info_dict.get("name", "")
+                asn_desc_short = asn_info_dict.get("description_short", "")
+                asn_desc_long = asn_info_dict.get("description", "")
+                asn_country = asn_info_dict.get("country_code", "")
+                asn_type = asn_info_dict.get("type", "")
+                asn_website = asn_info_dict.get("website", "")
+                asn_lg = asn_info_dict.get("looking_glass", "")
+                asn_irr = asn_info_dict.get("irr_as_set", "")
+                asn_registry = asn_info_dict.get("rir_allocation", {}).get("rir_name", "")
+                asn_alloc_date = asn_info_dict.get("rir_allocation", {}).get("allocation_date", "")
+                asn_org_website = asn_info_dict.get("org", {}).get("website", "")
 
-            asn_info = []
-            if hostname:
-                asn_info.append(hostname)
-            if org:
-                asn_info.append(org)
-            if country:
-                asn_info.append(country)
-            
-            return " | ".join(asn_info) if asn_info else None
+                # Prefix fields
+                prefix = prefix_info.get("prefix", "")
+                prefix_name = prefix_info.get("name", "")
+                prefix_desc = prefix_info.get("description", "")
+                prefix_country = prefix_info.get("country_code", "")
+                prefix_parent = prefix_info.get("parent", "")
+
+                asn_info = []
+                if asn:
+                    asn_info.append(f"AS{asn}")
+                if asn_name:
+                    asn_info.append(f"ASNName:{asn_name}")
+                if asn_desc_short and asn_desc_short != asn_name:
+                    asn_info.append(f"ASNDescShort:{asn_desc_short}")
+                if asn_desc_long and asn_desc_long != asn_desc_short:
+                    asn_info.append(f"ASNDescLong:{asn_desc_long}")
+                if asn_country:
+                    asn_info.append(f"ASNCountry:{asn_country}")
+                if asn_type:
+                    asn_info.append(f"ASNType:{asn_type}")
+                if asn_website:
+                    asn_info.append(f"ASNWebsite:{asn_website}")
+                if asn_lg:
+                    asn_info.append(f"ASNLG:{asn_lg}")
+                if asn_irr:
+                    asn_info.append(f"ASNIRR:{asn_irr}")
+                if asn_registry:
+                    asn_info.append(f"RIR:{asn_registry}")
+                if asn_alloc_date:
+                    asn_info.append(f"AllocDate:{asn_alloc_date}")
+                if asn_org_website:
+                    asn_info.append(f"OrgWebsite:{asn_org_website}")
+
+                if prefix:
+                    asn_info.append(f"Prefix:{prefix}")
+                if prefix_name:
+                    asn_info.append(f"PrefixName:{prefix_name}")
+                if prefix_desc:
+                    asn_info.append(f"PrefixDesc:{prefix_desc}")
+                if prefix_country:
+                    asn_info.append(f"PrefixCountry:{prefix_country}")
+                if prefix_parent:
+                    asn_info.append(f"PrefixParent:{prefix_parent}")
+
+                return " | ".join(asn_info) if asn_info else None
         return None
     except Exception as e:
         print(f"Error getting ASN for {ip}: {e}")
