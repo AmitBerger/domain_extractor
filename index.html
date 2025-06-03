@@ -189,7 +189,7 @@
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ text: inputText }),
+                        body: JSON.stringify({ text: inputText, checkVirusTotal: validationSettings.checkVirusTotal }),
                     });
                     
                     const data = await response.json();

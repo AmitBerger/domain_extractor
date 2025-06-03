@@ -28,13 +28,15 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 
 # === Initialize global appearance and theme ===
-ctk.set_appearance_mode("System")          # Options: "System", "Light", "Dark"
+ctk.set_appearance_mode("System")  # Options: "System", "Light", "Dark"
+
 
 class DomainExtractorApp(ctk.CTk):
     """
     Main application window for the domain extractor.
     Handles UI setup, user interaction, and subprocess calls to domain_extractor.py
     """
+
     def __init__(self):
         super().__init__()
 
@@ -53,7 +55,7 @@ class DomainExtractorApp(ctk.CTk):
         self.appearance_option = ctk.CTkOptionMenu(
             self.top_frame,
             values=["System", "Light", "Dark"],
-            command=self.change_appearance_mode
+            command=self.change_appearance_mode,
         )
         self.appearance_option.set("System")
         self.appearance_option.pack(side="left", padx=(0, 20))
@@ -64,7 +66,7 @@ class DomainExtractorApp(ctk.CTk):
         self.theme_option = ctk.CTkOptionMenu(
             self.top_frame,
             values=["blue", "green"],
-            command=self.change_theme   #Not working for now
+            command=self.change_theme,  # Not working for now
         )
         self.theme_option.set("blue")
         self.theme_option.pack(side="left")
@@ -83,7 +85,7 @@ class DomainExtractorApp(ctk.CTk):
             self.url_frame,
             text="Extract from URL",
             command=self.extract_from_url,
-            corner_radius=10
+            corner_radius=10,
         )
         self.extract_url_button.pack(side="left")
 
@@ -92,7 +94,7 @@ class DomainExtractorApp(ctk.CTk):
             self,
             text="Select Text Files",
             command=self.extract_from_files,
-            corner_radius=10
+            corner_radius=10,
         )
         self.file_button.pack(pady=10)
 
@@ -113,9 +115,15 @@ class DomainExtractorApp(ctk.CTk):
         self.result_text = tk.Text(self, width=80, height=18, bd=0, wrap="none")
         self.result_text.pack(padx=20, pady=(0, 20), fill="both", expand=True)
         # VT status tags
-        self.result_text.tag_configure("malicious", foreground="red", font=("TkDefaultFont", 10, "bold"))
-        self.result_text.tag_configure("suspicious", foreground="orange", font=("TkDefaultFont", 10, "bold"))
-        self.result_text.tag_configure("clean", foreground="green", font=("TkDefaultFont", 10, "bold"))
+        self.result_text.tag_configure(
+            "malicious", foreground="red", font=("TkDefaultFont", 10, "bold")
+        )
+        self.result_text.tag_configure(
+            "suspicious", foreground="orange", font=("TkDefaultFont", 10, "bold")
+        )
+        self.result_text.tag_configure(
+            "clean", foreground="green", font=("TkDefaultFont", 10, "bold")
+        )
 
         # === Download Output.txt Button ===
         self.download_button = ctk.CTkButton(
@@ -123,7 +131,7 @@ class DomainExtractorApp(ctk.CTk):
             text="Download output.txt",
             command=self.download_output_file,
             corner_radius=10,
-            state="disabled"
+            state="disabled",
         )
         self.download_button.pack(pady=(0, 10))
 
@@ -133,7 +141,8 @@ class DomainExtractorApp(ctk.CTk):
 
         # === Optional conclusions label (unused but reserved) ===
         self.conclusions_label = ctk.CTkLabel(
-            self, text="", font=ctk.CTkFont(size=14, weight="bold"))
+            self, text="", font=ctk.CTkFont(size=14, weight="bold")
+        )
         self.conclusions_label.pack(pady=(0, 10))
 
     # === Theme and Appearance Methods ===
@@ -182,7 +191,7 @@ class DomainExtractorApp(ctk.CTk):
         """
         file_paths = filedialog.askopenfilenames(
             title="Select Text Files",
-            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
         )
 
         if file_paths:
@@ -196,7 +205,9 @@ class DomainExtractorApp(ctk.CTk):
 
                 # Show file names and clear results
                 filenames = [os.path.basename(path) for path in file_paths]
-                self.input_info_label.configure(text=f"Uploaded files: {', '.join(filenames)}")
+                self.input_info_label.configure(
+                    text=f"Uploaded files: {', '.join(filenames)}"
+                )
                 self.result_text.delete("1.0", "end")
 
                 self.run_extraction(combined_input)
@@ -249,7 +260,9 @@ class DomainExtractorApp(ctk.CTk):
                         # Insert VT:... with color tag
                         self.result_text.insert("end", vt_str, vt_tag)
                         # Insert the rest of the line
-                        self.result_text.insert("end", line_wo_asn[vt_index+len(vt_str):])
+                        self.result_text.insert(
+                            "end", line_wo_asn[vt_index + len(vt_str) :]
+                        )
                     else:
                         self.result_text.insert("end", line_wo_asn)
                 self.download_button.configure(state="normal")
@@ -277,7 +290,7 @@ class DomainExtractorApp(ctk.CTk):
         save_path = filedialog.asksaveasfilename(
             defaultextension=".txt",
             filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
-            initialfile="output.txt"
+            initialfile="output.txt",
         )
         if save_path:
             try:
@@ -286,6 +299,7 @@ class DomainExtractorApp(ctk.CTk):
                 messagebox.showinfo("Success", f"Saved as {save_path}")
             except Exception as e:
                 messagebox.showerror("Error", f"Could not save file: {e}")
+
 
 # === Run application ===
 if __name__ == "__main__":
