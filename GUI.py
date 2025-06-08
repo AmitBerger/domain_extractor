@@ -189,12 +189,10 @@ class DomainExtractorApp(ctk.CTk):
         Called when user selects files.
         Combines contents of selected text files and runs extraction.
         """
-        file_paths = filedialog.askopenfilenames(
+        if file_paths := filedialog.askopenfilenames(
             title="Select Text Files",
-            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
-        )
-
-        if file_paths:
+            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+        ):
             combined_input = "combined_input.txt"
             try:
                 # Combine all selected files into one
@@ -221,16 +219,9 @@ class DomainExtractorApp(ctk.CTk):
         """
         output_file = "output.txt"
         try:
-            self.status_bar.configure(text="Processing...")
-            self.progress_bar.set(0.5)
-            self.update_idletasks()
+            self._set_processing_state()
 
-            # Run domain_extractor.py via subprocess, include VT key if set
-            vt_key = os.getenv("VIRUSTOTAL_API_KEY")
-            cmd = ["python", "domain_extractor.py", input_file, output_file]
-            if vt_key:
-                cmd.append(vt_key)
-            subprocess.run(cmd, check=True)
+            self._run_domain_extractor_subprocess(input_file, output_file)
 
             self.progress_bar.set(1.0)
             self.status_bar.configure(text="Completed")
@@ -287,18 +278,29 @@ class DomainExtractorApp(ctk.CTk):
         if not os.path.exists(output_file):
             messagebox.showerror("Error", "No output.txt file found.")
             return
-        save_path = filedialog.asksaveasfilename(
+        if save_path := filedialog.asksaveasfilename(
             defaultextension=".txt",
             filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
             initialfile="output.txt",
-        )
-        if save_path:
+        ):
             try:
                 with open(output_file, "rb") as src, open(save_path, "wb") as dst:
                     dst.write(src.read())
                 messagebox.showinfo("Success", f"Saved as {save_path}")
             except Exception as e:
                 messagebox.showerror("Error", f"Could not save file: {e}")
+
+    def _set_processing_state(self):
+        self.status_bar.configure(text="Processing...")
+        self.progress_bar.set(0.5)
+        self.update_idletasks()
+
+    def _run_domain_extractor_subprocess(self, input_file, output_file):
+        vt_key = os.getenv("VIRUSTOTAL_API_KEY")
+        cmd = ["python", "domain_extractor.py", input_file, output_file]
+        if vt_key:
+            cmd.append(vt_key)
+        subprocess.run(cmd, check=True)
 
 
 # === Run application ===

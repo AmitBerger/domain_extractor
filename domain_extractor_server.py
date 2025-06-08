@@ -53,7 +53,7 @@ def process_domains(text, check_vt=True):
                 "ip": ip,
                 "id": domain.replace(".", "_"),
                 "vt_status": vt_status,
-                "asn_info": asn_dict if asn_dict else None,
+                "asn_info": asn_dict or None,
             }
         )
 
