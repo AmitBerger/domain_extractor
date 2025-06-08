@@ -134,26 +134,6 @@ The output file contains one domain per line:
 
 ---
 
-## 🛠️ API Endpoints
-
-For programmatic use or integration:
-
-- `POST /api/extract`  
-  **Body:** `{ "text": "...", "checkVirusTotal": true/false, "virustotal_api_key": "..." }`  
-  **Returns:** Extraction results and stats.
-
-- `POST /api/extract-file`  
-  **Form-data:** `file` (upload), `virustotal_api_key` (optional)  
-  **Returns:** Extraction results and stats.
-
-- `POST /api/download`  
-  **Body:** `{ "results": [...] }`  
-  **Returns:** Downloadable TXT file of results.
-
-- `GET /api/download-output`  
-  **Returns:** The latest `output.txt` file (if available).
-
----
 
 ## 🔧 How It Works
 
