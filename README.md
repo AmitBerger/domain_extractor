@@ -2,7 +2,7 @@
 
 A powerful and lightweight Python tool that extracts, validates, and resolves domain names from text files, with advanced analysis and multiple interfaces.
 
-![Python](https://img.shields.io/badge/Python-3.6%2B-brightgreen)
+![Python](https://img.shields.io/badge/Python-3.6%2B-brightgreen)  ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ## 📋 Overview
 
@@ -94,6 +94,9 @@ The output file contains one domain per line:
   python GUI.py
   ```
 
+![gi](https://github.com/user-attachments/assets/2f0c4a29-8d6a-49e7-a058-376508ada4cd)
+
+
 ---
 
 ### Web Interface
@@ -116,6 +119,10 @@ The output file contains one domain per line:
   4. Click **Extract & Analyze**.
   5. View results in the browser (ASN info is shown in a collapsible section for each domain).
   6. **Download the full output.txt** (with detailed ASN info) using the "Download Full Report" button, enabled after extraction.
+
+![index](https://github.com/user-attachments/assets/be1dd5db-706f-46ec-94d9-8a07c9ec29ef)
+
+  
 
 #### **Web Dashboard Features**
 - **Stats & Charts:** Visualize total, resolved, valid, and clean domains.
@@ -212,6 +219,12 @@ $ python domain_extractor.py server_logs.txt domains.txt
 ## 📬 Contact
 
 Project Link: [https://github.com/AmitBerger/domain_extractor](https://github.com/AmitBerger/domain_extractor)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
