@@ -22,7 +22,7 @@ if not VT_API_KEY:
     )
 
 
-def process_domains(text, check_vt=True):
+def process_domains(text, vt_api_key=None, check_vt=True):
     """Extract and resolve domains using domain_extractor.py functions"""
     domains = extract_domains(text)
     results = []
@@ -30,8 +30,8 @@ def process_domains(text, check_vt=True):
     for domain in domains:
         ip = get_domain_ip(domain)
         vt_status = (
-            check_domain_virustotal(domain, VT_API_KEY)
-            if (VT_API_KEY and check_vt)
+            check_domain_virustotal(domain, vt_api_key)
+            if (vt_api_key and check_vt)
             else None
         )
         asn_info = get_asn_info(ip) if ip else None
@@ -71,10 +71,11 @@ def extract_domains_api():
         data = request.get_json()
         text = data.get("text", "")
         check_vt = data.get("checkVirusTotal", True)
+        vt_api_key = data.get("virustotal_api_key")
         if not text:
             return jsonify({"error": "No text provided"}), 400
 
-        results = process_domains(text, check_vt)
+        results = process_domains(text, vt_api_key, check_vt)
         return jsonify(
             {
                 "success": True,
@@ -93,6 +94,7 @@ def extract_domains_api():
 @app.route("/api/extract-file", methods=["POST"])
 def extract_from_file():
     try:
+        vt_api_key = request.form.get("virustotal_api_key")
         if "file" not in request.files:
             return jsonify({"error": "No file provided"}), 400
 
@@ -101,7 +103,7 @@ def extract_from_file():
             return jsonify({"error": "No file selected"}), 400
 
         text = file.read().decode("utf-8")
-        results = process_domains(text)
+        results = process_domains(text, vt_api_key)
 
         return jsonify(
             {

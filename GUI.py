@@ -71,6 +71,12 @@ class DomainExtractorApp(ctk.CTk):
         self.theme_option.set("blue")
         self.theme_option.pack(side="left")
 
+        # === VirusTotal API Key Entry (NEW) ===
+        self.vt_api_key_entry = ctk.CTkEntry(
+            self.top_frame, width=200, placeholder_text="VirusTotal API Key (optional)"
+        )
+        self.vt_api_key_entry.pack(side="left", padx=(10, 0))
+
         # === URL Input Section ===
         self.url_frame = ctk.CTkFrame(self)
         self.url_frame.pack(pady=10, padx=20, fill="x")
@@ -284,8 +290,12 @@ class DomainExtractorApp(ctk.CTk):
             initialfile="output.txt",
         ):
             try:
-                with open(output_file, "rb") as src, open(save_path, "wb") as dst:
-                    dst.write(src.read())
+                # Read contents first
+                with open(output_file, "rb") as src:
+                    data = src.read()
+                # Now write to destination
+                with open(save_path, "wb") as dst:
+                    dst.write(data)
                 messagebox.showinfo("Success", f"Saved as {save_path}")
             except Exception as e:
                 messagebox.showerror("Error", f"Could not save file: {e}")
@@ -296,7 +306,7 @@ class DomainExtractorApp(ctk.CTk):
         self.update_idletasks()
 
     def _run_domain_extractor_subprocess(self, input_file, output_file):
-        vt_key = os.getenv("VIRUSTOTAL_API_KEY")
+        vt_key = self.vt_api_key_entry.get().strip()
         cmd = ["python", "domain_extractor.py", input_file, output_file]
         if vt_key:
             cmd.append(vt_key)

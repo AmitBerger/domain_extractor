@@ -167,11 +167,11 @@
             const [showStats, setShowStats] = useState(false);
             const [validationSettings, setValidationSettings] = useState({
                 checkDNS: true,
-                checkVirusTotal: false,
-                checkWhois: false
+                checkVirusTotal: false
             });
             const [history, setHistory] = useState([]);
             const [showAdvanced, setShowAdvanced] = useState(false);
+            const [virustotalApiKey, setVirustotalApiKey] = useState('');
             const chartRef = useRef(null);
             const chartInstance = useRef(null);
 
@@ -189,7 +189,11 @@
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ text: inputText, checkVirusTotal: validationSettings.checkVirusTotal }),
+                        body: JSON.stringify({
+                            text: inputText,
+                            checkVirusTotal: validationSettings.checkVirusTotal,
+                            virustotal_api_key: virustotalApiKey || undefined,
+                        }),
                     });
                     
                     const data = await response.json();
@@ -198,10 +202,7 @@
                         // Transform the results to match our enhanced format
                         const enhancedResults = data.results.map((result, index) => ({
                             ...result,
-                            id: result.id || index + 1,
-                            registrar: null, // Would need additional API for WHOIS
-                            created: null,
-                            expires: null
+                            id: result.id || index + 1
                         }));
                         
                         setResults(enhancedResults);
@@ -228,6 +229,7 @@
                 
                 const formData = new FormData();
                 formData.append('file', file);
+                if (virustotalApiKey) formData.append('virustotal_api_key', virustotalApiKey);
                 
                 try {
                     const response = await fetch('http://localhost:5000/api/extract-file', {
@@ -241,10 +243,7 @@
                         // Transform the results to match our enhanced format
                         const enhancedResults = data.results.map((result, index) => ({
                             ...result,
-                            id: result.id || index + 1,
-                            registrar: null, // Would need additional API for WHOIS
-                            created: null,
-                            expires: null
+                            id: result.id || index + 1
                         }));
                         
                         setResults(enhancedResults);
@@ -527,13 +526,14 @@
                                                                 VirusTotal Check
                                                             </label>
                                                             <label className="flex items-center text-gray-300">
+                                                                <span className="mr-2">VirusTotal API Key:</span>
                                                                 <input
-                                                                    type="checkbox"
-                                                                    checked={validationSettings.checkWhois}
-                                                                    onChange={(e) => setValidationSettings({...validationSettings, checkWhois: e.target.checked})}
-                                                                    className="mr-2 text-purple-600 focus:ring-purple-500"
+                                                                    type="text"
+                                                                    value={virustotalApiKey}
+                                                                    onChange={e => setVirustotalApiKey(e.target.value)}
+                                                                    className="ml-2 px-2 py-1 rounded bg-gray-900 text-gray-200 border border-gray-700"
+                                                                    placeholder="Optional"
                                                                 />
-                                                                WHOIS Lookup
                                                             </label>
                                                         </div>
                                                     )}
